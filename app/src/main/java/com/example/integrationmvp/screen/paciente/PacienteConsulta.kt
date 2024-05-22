@@ -1,4 +1,4 @@
-package com.example.integrationmvp.screen
+package com.example.integrationmvp.screen.paciente
 
 import com.example.integrationmvp.ui.theme.Azul1
 import com.example.integrationmvp.ui.theme.Azul3
@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.integrationmvp.ui.theme.Azul4
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -58,7 +59,7 @@ fun PacienteConsulta(navController: NavController) {
                     Button(
                         onClick = { /* Handle navigation back */ },
                         colors = ButtonDefaults.buttonColors( // Set button colors
-                            containerColor = Azul3, // New name for background color
+                            containerColor = Azul4, // New name for background color
                             contentColor = Color.White // Cor do Texto do Botão
                         )
                     ) {

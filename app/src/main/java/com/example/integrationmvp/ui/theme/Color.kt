@@ -12,7 +12,7 @@ val Pink40 = Color(0xFF7D5260)
 
 
 val Azul5 = Color(0xFF3365A6)
-val Azul4 = Color(0xFF3370A6)
+val Azul4 = Color(0xFF0F304D)
 val Azul3 = Color(0xFF049DD9)
 val Azul2 = Color(0xFF04B2D9)
 val Azul1 = Color(0xFFF2F2F2)

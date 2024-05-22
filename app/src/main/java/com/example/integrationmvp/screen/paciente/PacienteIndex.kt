@@ -1,9 +1,7 @@
-package com.example.integrationmvp.screen
+package com.example.integrationmvp.screen.paciente
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -17,14 +15,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.integrationmvp.component.BottomNavigation
 import com.example.integrationmvp.ui.theme.Azul1
-import com.example.integrationmvp.ui.theme.Azul2
-import com.example.integrationmvp.ui.theme.Azul3
 import com.example.integrationmvp.ui.theme.Azul4
 import com.example.integrationmvp.ui.theme.Azul5
 
@@ -45,6 +44,12 @@ fun fetchPacientes(): List<PacienteModel> {
     // Implemente aqui a lógica para carregar os pacientes do banco de dados ou de uma fonte de dados
     return listOf(
         PacienteModel(1, "João", "123.456.789-00", "01/01/1990", "Masculino", "Av. Paulista", "123456789", "joao@example.com"),
+        PacienteModel(1, "João", "123.456.789-00", "01/01/1990", "Masculino", "Av. Paulista", "123456789", "joao@example.com"),
+        PacienteModel(1, "João", "123.456.789-00", "01/01/1990", "Masculino", "Av. Paulista", "123456789", "joao@example.com"),
+        PacienteModel(1, "João", "123.456.789-00", "01/01/1990", "Masculino", "Av. Paulista", "123456789", "joao@example.com"),
+        PacienteModel(1, "João", "123.456.789-00", "01/01/1990", "Masculino", "Av. Paulista", "123456789", "joao@example.com"),
+        PacienteModel(1, "João", "123.456.789-00", "01/01/1990", "Masculino", "Av. Paulista", "123456789", "joao@example.com"),
+        PacienteModel(1, "João", "123.456.789-00", "01/01/1990", "Masculino", "Av. Paulista", "123456789", "joao@example.com"),
         PacienteModel(2, "Maria", "987.654.321-00", "02/02/1995", "Feminino", "Av. Paulista", "987654321", "maria@example.com")
     )
 }
@@ -55,58 +60,78 @@ fun fetchPacientes(): List<PacienteModel> {
 fun PacienteIndex(navController: NavController) {
     val pacientes = fetchPacientes()
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = "Pacientes",
-                        color = Azul5,
-                    )
-                }
-            )
-        }
-    ) { innerPadding ->
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
-                .padding(16.dp) // Adicionando o padding aqui
-                .verticalScroll(rememberScrollState())
+                .padding(20.dp)
+                .background(Color.White),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Button( // Button in the column
-                onClick = { /* Implemente a lógica para adicionar novo paciente */ },
+            // Nome do aplicativo
+            Text(
+                text = "Pacientes",
+                textAlign = TextAlign.Center,
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold,
+                color = Azul4,
                 modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(bottom = 16.dp),
-                colors = ButtonDefaults.buttonColors(
-                    Azul4,
-                    contentColor = Azul1
-                )
+                    .padding(bottom = 46.dp)
 
+            )
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
+                    .verticalScroll(rememberScrollState())
             ) {
-                Text(text = "Novo Paciente")
-            }
+                Button( // Button in the column
+                    onClick = { navController.navigate("PacienteCadastro") },
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(bottom = 16.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        Azul4,
+                        contentColor = Azul1
+                    )
 
-            if (pacientes.isNotEmpty()) {
-                pacientes.forEach { paciente ->
-                    PacienteCard(
-                        paciente = paciente,
-                        onEditClick = { /* Implemente a lógica para editar o paciente */ },
-                        onDeleteClick = { /* Implemente a lógica para excluir o paciente */ },
-                        onChangeClick = { /* Implemente a lógica para alterar o paciente */ }
+                ) {
+                    Text(text = "Novo Paciente")
+                }
+
+                if (pacientes.isNotEmpty()) {
+                    pacientes.forEach { paciente ->
+                        PacienteCard(
+                            paciente = paciente,
+                            onEditClick = { navController.navigate("PacienteConsultar")},
+                            onDeleteClick = { navController.navigate("PacienteAtualizar") },
+                            onChangeClick = { navController.navigate("PacienteExcluir") }
+                        )
+                    }
+                } else {
+                    Text(
+                        text = "Nenhum paciente encontrado.",
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
                 }
-            } else {
-                Text(
-                    text = "Nenhum paciente encontrado.",
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                )
+
+                // Spacer to push content up
+                Spacer(modifier = Modifier.height(16.dp)) // Add some space
             }
         }
+
+        BottomNavigation(
+            navController = navController,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+
+        )
     }
 }
-
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -126,7 +151,7 @@ fun PacienteCard(
             modifier = Modifier
                 .background(Azul1) // Set text color for content inside
         ) {
-            Text(text = "ID: ${paciente.id}")
+
             Text(text = "Nome: ${paciente.nome}")
             Text(text = "CPF: ${paciente.cpf}")
             Text(text = "Data de Nascimento: ${paciente.dataNascimento}")
@@ -146,7 +171,7 @@ fun PacienteCard(
                         Azul4,
                         contentColor = Azul1
                     )) {
-                    Text(text = "Editar")
+                    Text(text = "Consultar")
 
                 }
                 Button(onClick = onDeleteClick,
@@ -154,23 +179,24 @@ fun PacienteCard(
                         Azul4,
                         contentColor = Azul1
                     )) {
-                    Text(text = "Excluir")
+                    Text(text = "Atualizar")
                 }
                 Button(onClick = onChangeClick,
                     colors = ButtonDefaults.buttonColors(
                         Azul4,
                         contentColor = Azul1
                     )) {
-                    Text(text = "Alterar")
+                    Text(text = "Excluir")
 
                 }
             }
         }
     }
+
 }
 
 
-@Preview("Paciente Index Preview")
+@Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun PacienteIndexPreview() {
     val navController = rememberNavController()
