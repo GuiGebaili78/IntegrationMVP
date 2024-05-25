@@ -8,9 +8,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,42 +21,17 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.integrationmvp.component.BottomNavigation
+import com.example.integrationmvp.model.PacienteModel
 import com.example.integrationmvp.ui.theme.Azul1
 import com.example.integrationmvp.ui.theme.Azul4
-import com.example.integrationmvp.ui.theme.Azul5
-
-// Modelo de dados simulado
-data class PacienteModel(
-    val id: Int,
-    val nome: String,
-    val cpf: String,
-    val dataNascimento: String,
-    val genero: String,
-    val endereco: String,
-    val contato: String,
-    val email: String
-)
-
-// Função para simular o carregamento de dados
-fun fetchPacientes(): List<PacienteModel> {
-    // Implemente aqui a lógica para carregar os pacientes do banco de dados ou de uma fonte de dados
-    return listOf(
-        PacienteModel(1, "João", "123.456.789-00", "01/01/1990", "Masculino", "Av. Paulista", "123456789", "joao@example.com"),
-        PacienteModel(1, "João", "123.456.789-00", "01/01/1990", "Masculino", "Av. Paulista", "123456789", "joao@example.com"),
-        PacienteModel(1, "João", "123.456.789-00", "01/01/1990", "Masculino", "Av. Paulista", "123456789", "joao@example.com"),
-        PacienteModel(1, "João", "123.456.789-00", "01/01/1990", "Masculino", "Av. Paulista", "123456789", "joao@example.com"),
-        PacienteModel(1, "João", "123.456.789-00", "01/01/1990", "Masculino", "Av. Paulista", "123456789", "joao@example.com"),
-        PacienteModel(1, "João", "123.456.789-00", "01/01/1990", "Masculino", "Av. Paulista", "123456789", "joao@example.com"),
-        PacienteModel(1, "João", "123.456.789-00", "01/01/1990", "Masculino", "Av. Paulista", "123456789", "joao@example.com"),
-        PacienteModel(2, "Maria", "987.654.321-00", "02/02/1995", "Feminino", "Av. Paulista", "987654321", "maria@example.com")
-    )
-}
+import com.example.integrationmvp.viewModel.PacienteViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PacienteIndex(navController: NavController) {
-    val pacientes = fetchPacientes()
+    val pacienteView =  PacienteViewModel()
+    val pacientes = pacienteView.getPacientes()
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -152,13 +125,12 @@ fun PacienteCard(
                 .background(Azul1) // Set text color for content inside
         ) {
 
-            Text(text = "Nome: ${paciente.nome}")
+            Text(text = "Nome: ${paciente.nomePaciente}")
             Text(text = "CPF: ${paciente.cpf}")
             Text(text = "Data de Nascimento: ${paciente.dataNascimento}")
             Text(text = "Gênero: ${paciente.genero}")
             Text(text = "Endereço: ${paciente.endereco}")
             Text(text = "Contato: ${paciente.contato}")
-            Text(text = "Email: ${paciente.email}")
 
             Spacer(modifier = Modifier.height(8.dp))
 

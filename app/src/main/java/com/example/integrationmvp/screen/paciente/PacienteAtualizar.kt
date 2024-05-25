@@ -36,17 +36,21 @@ import com.example.integrationmvp.component.FormComponent
 import com.example.integrationmvp.ui.theme.Azul1
 import com.example.integrationmvp.ui.theme.Azul4
 import com.example.integrationmvp.ui.theme.Azul5
+import com.example.integrationmvp.viewModel.PacienteViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun PacienteAtualizar(navController: NavController) {
+
+    //val pacienteView =  PacienteViewModel()
+    //val paciente = pacienteView.getPaciente(id)
+
     var nome by remember { mutableStateOf("") }
     var cpf by remember { mutableStateOf("") }
     var dataNascimento by remember { mutableStateOf("") }
     var genero by remember { mutableStateOf("") }
     var endereco by remember { mutableStateOf("") }
     var contato by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
 
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -162,19 +166,7 @@ fun PacienteAtualizar(navController: NavController) {
                         )
                         Spacer(modifier = Modifier.height(2.dp))
 
-                        FormComponent(
-                            value = email,
-                            placeholder = "Digite seu email",
-                            label = "email",
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp),
-                            keyboardType = KeyboardType.Email,
-                            atualizarValor = { novoValor ->
-                                email = novoValor
-                            }
-                        )
-                        Spacer(modifier = Modifier.height(2.dp))
+
                         // Repeat TextField for other fields (cpf, dataNascimento, genero, endereco, contato, email)
 
                         Button(
