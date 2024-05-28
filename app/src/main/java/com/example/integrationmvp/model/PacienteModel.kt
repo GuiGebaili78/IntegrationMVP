@@ -6,7 +6,7 @@ import java.time.LocalDate
 
 
 data class PacienteModel @RequiresApi(Build.VERSION_CODES.O) constructor(
-    val pacientId: Long = 0,
+    val pacienteId: Long = 0,
     val nomePaciente: String? = null,
     val cpf: String? = null,
     val dataNascimento: String? = null,

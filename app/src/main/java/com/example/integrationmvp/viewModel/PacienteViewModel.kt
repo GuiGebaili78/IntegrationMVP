@@ -46,7 +46,7 @@ class PacienteViewModel : ViewModel() {
     }
 
     fun getPaciente(id: Long): PacienteModel? {
-        return _pacientes.value?.find { it.pacientId == id }
+        return _pacientes.value?.find { it.pacienteId == id }
     }
 
     fun getPacientes(): List<PacienteModel> {
@@ -57,7 +57,7 @@ class PacienteViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val updatedPaciente = PacienteApiClient.apiService.updatePaciente(id, paciente)
-                _pacientes.value = _pacientes.value.map { if (it.pacientId == id) updatedPaciente else it }
+                _pacientes.value = _pacientes.value.map { if (it.pacienteId == id) updatedPaciente else it }
             } catch (e: Exception) {
                 // Handle error
             }
@@ -68,7 +68,7 @@ class PacienteViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 PacienteApiClient.apiService.deletePaciente(id)
-                _pacientes.value = _pacientes.value.filter { it.pacientId != id }
+                _pacientes.value = _pacientes.value.filter { it.pacienteId != id }
             } catch (e: Exception) {
                 // Handle error
             }

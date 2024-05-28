@@ -1,4 +1,4 @@
-package com.example.integrationmvp.screen.paciente
+package com.example.integrationmvp.screen.medico
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -21,17 +21,17 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.integrationmvp.component.BottomNavigation
-import com.example.integrationmvp.model.PacienteModel
+import com.example.integrationmvp.model.MedicoModel
 import com.example.integrationmvp.ui.theme.Azul1
 import com.example.integrationmvp.ui.theme.Azul4
-import com.example.integrationmvp.viewModel.PacienteViewModel
+import com.example.integrationmvp.viewModel.MedicoViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PacienteIndex(navController: NavController) {
-    val pacienteView =  PacienteViewModel()
-    val pacientes = pacienteView.getPacientes()
+fun MedicoIndex(navController: NavController) {
+    val medicoView =  MedicoViewModel()
+    val medicos = medicoView.getMedicos()
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -46,7 +46,7 @@ fun PacienteIndex(navController: NavController) {
         ) {
 
             Text(
-                text = "Pacientes",
+                text = "Médicos",
                 textAlign = TextAlign.Center,
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
@@ -61,8 +61,8 @@ fun PacienteIndex(navController: NavController) {
                     .padding(16.dp)
                     .verticalScroll(rememberScrollState())
             ) {
-                Button( // Button in the column
-                    onClick = { navController.navigate("PacienteCadastro") },
+                Button(
+                    onClick = { navController.navigate("MedicoCadastro") },
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .padding(bottom = 16.dp),
@@ -72,27 +72,26 @@ fun PacienteIndex(navController: NavController) {
                     )
 
                 ) {
-                    Text(text = "Novo Paciente")
+                    Text(text = "Novo Médico")
                 }
 
-                if (pacientes.isNotEmpty()) {
-                    pacientes.forEach { paciente ->
-                        PacienteCard(
-                            paciente = paciente,
-                            onEditClick = { navController.navigate("pacienteatualizar")},
-                            onDeleteClick = { navController.navigate("pacienteexcluir") },
-                            onChangeClick = { navController.navigate("pacienteconsultar") }
+                if (medicos.isNotEmpty()) {
+                    medicos.forEach { medico ->
+                        MedicosCard(
+                            medico = medico,
+                            onEditClick = { navController.navigate("medicoatualizar")},
+                            onDeleteClick = { navController.navigate("medicoexcluir") },
+                            onChangeClick = { navController.navigate("medicoconsultar") }
                         )
                     }
                 } else {
                     Text(
-                        text = "Nenhum paciente encontrado.",
+                        text = "Nenhum médico encontrado.",
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
                 }
 
-                // Spacer to push content up
-                Spacer(modifier = Modifier.height(16.dp)) // Add some space
+                Spacer(modifier = Modifier.height(16.dp))
             }
         }
 
@@ -109,8 +108,8 @@ fun PacienteIndex(navController: NavController) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PacienteCard(
-    paciente: PacienteModel,
+fun MedicosCard(
+    medico: MedicoModel,
     onEditClick: () -> Unit,
     onDeleteClick: () -> Unit,
     onChangeClick: () -> Unit
@@ -120,17 +119,15 @@ fun PacienteCard(
             .fillMaxWidth()
             .padding(bottom = 16.dp)
     ) {
-        Column( // Wrap content with a Column
+        Column(
             modifier = Modifier
-                .background(Azul1) // Set text color for content inside
+                .background(Azul1)
         ) {
 
-            Text(text = "Nome: ${paciente.nomePaciente}")
-            Text(text = "CPF: ${paciente.cpf}")
-            Text(text = "Data de Nascimento: ${paciente.dataNascimento}")
-            Text(text = "Gênero: ${paciente.genero}")
-            Text(text = "Endereço: ${paciente.endereco}")
-            Text(text = "Contato: ${paciente.contato}")
+            Text(text = "Nome: ${medico.nomeMedico}")
+            Text(text = "CRM: ${medico.crm}")
+            Text(text = "Especialidade: ${medico.especialidade}")
+            Text(text = "Contato: ${medico.contato}")
 
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -170,7 +167,7 @@ fun PacienteCard(
 
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
-fun PacienteIndexPreview() {
+fun MedicoIndexPreview() {
     val navController = rememberNavController()
-    PacienteIndex(navController = navController)
+    MedicoIndex(navController = navController)
 }

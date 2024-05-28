@@ -1,4 +1,4 @@
-package com.example.integrationmvp.screen.screens
+package com.example.integrationmvp.screen
 
 import com.example.integrationmvp.R
 import com.example.integrationmvp.ui.theme.Azul4
@@ -22,7 +22,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -32,7 +31,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.integrationmvp.ui.theme.Azul1
-import com.example.integrationmvp.ui.theme.Azul5
 
 @Composable
 fun BemVindo(navController: NavController) {

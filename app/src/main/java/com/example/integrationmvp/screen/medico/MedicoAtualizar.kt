@@ -1,8 +1,6 @@
-package com.example.integrationmvp.screen.paciente
+package com.example.integrationmvp.screen.medico
 
-import android.icu.text.SimpleDateFormat
-import android.os.Build
-import androidx.annotation.RequiresApi
+
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -35,31 +33,28 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.integrationmvp.component.BottomNavigation
 import com.example.integrationmvp.component.FormComponent
-import com.example.integrationmvp.model.PacienteModel
 import com.example.integrationmvp.ui.theme.Azul1
 import com.example.integrationmvp.ui.theme.Azul4
 import com.example.integrationmvp.ui.theme.Azul5
-import com.example.integrationmvp.viewModel.PacienteViewModel
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
-@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
-fun PacienteCadastro(navController: NavController) {
-    var nome by remember { mutableStateOf("Paciente Teste 02") }
-    var cpf by remember { mutableStateOf("40288275829") }
-    var dataNascimento by remember { mutableStateOf("01/01/1999") }
-    var genero by remember { mutableStateOf("m") }
-    var endereco by remember { mutableStateOf("rua x 123") }
-    var contato by remember { mutableStateOf("1198888888") }
+fun MedicoAtualizar(navController: NavController) {
+
+    //val medicoView =  MedicoViewModel()
+    //val medico = medicoView.getMedico(id)
+
+    var nome by remember { mutableStateOf("") }
+    var crm by remember { mutableStateOf("") }
+    var especialidade by remember { mutableStateOf("") }
+    var contato by remember { mutableStateOf("") }
 
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Cadastro de Pacientes", color = Azul5) },
+                title = { Text(text = "Atualizar Médico", color = Azul5) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.Default.AccountCircle, contentDescription = "Back")
@@ -71,8 +66,8 @@ fun PacienteCadastro(navController: NavController) {
             Surface(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(contentPadding), // Use contentPadding to ensure content is not obscured by app bars
-                color = Azul1 // Cor de fundo do Surface
+                    .padding(contentPadding),
+                color = Azul1
             ) {
                 Box (
                     modifier = Modifier.fillMaxSize()
@@ -82,7 +77,7 @@ fun PacienteCadastro(navController: NavController) {
                             .fillMaxSize()
                             .verticalScroll(rememberScrollState())
                             .padding(2.dp)
-                            .padding(vertical = 4.dp) // Adicionando espaçamento vertical menor
+                            .padding(vertical = 4.dp)
                     ) {
                         FormComponent(
                             value = nome,
@@ -99,57 +94,30 @@ fun PacienteCadastro(navController: NavController) {
                         Spacer(modifier = Modifier.height(2.dp))
 
                         FormComponent(
-                            value = cpf,
-                            placeholder = "Digite seu CPF",
-                            label = "CPF",
+                            value = crm,
+                            placeholder = "Digite seu CRM",
+                            label = "CRM",
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(16.dp),
                             keyboardType = KeyboardType.Number,
                             atualizarValor = { novoValor ->
-                                cpf = novoValor
+                                crm = novoValor
                             }
                         )
                         Spacer(modifier = Modifier.height(2.dp))
 
-                        FormComponent(
-                            value = dataNascimento,
-                            placeholder = "Digite sua data de nascimento",
-                            label = "Nascimento",
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp),
-                            keyboardType = KeyboardType.Number,
-                            atualizarValor = { novoValor ->
-                                dataNascimento = novoValor
-                            }
-                        )
-                        Spacer(modifier = Modifier.height(2.dp))
 
                         FormComponent(
-                            value = genero,
-                            placeholder = "Digite seu gênero",
-                            label = "Gênero",
+                            value = especialidade,
+                            placeholder = "Digite sua especialidade",
+                            label = "especialidade",
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(16.dp),
                             keyboardType = KeyboardType.Text,
                             atualizarValor = { novoValor ->
-                                genero = novoValor
-                            }
-                        )
-                        Spacer(modifier = Modifier.height(2.dp))
-
-                        FormComponent(
-                            value = endereco,
-                            placeholder = "Digite seu endereço",
-                            label = "endereço",
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp),
-                            keyboardType = KeyboardType.Text,
-                            atualizarValor = { novoValor ->
-                                endereco = novoValor
+                                especialidade = novoValor
                             }
                         )
                         Spacer(modifier = Modifier.height(2.dp))
@@ -169,42 +137,22 @@ fun PacienteCadastro(navController: NavController) {
                         Spacer(modifier = Modifier.height(2.dp))
 
 
-                        // Repeat TextField for other fields (cpf, dataNascimento, genero, endereco, contato, email)
-
                         Button(
                             onClick = {
-                                val df = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-                                val longDtNascimento = LocalDate.parse(dataNascimento, df)
-                                val isoDf = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-                                val formattedDate = longDtNascimento.format(isoDf)
+                                keyboardController?.hide()
 
-                                val paciente = PacienteModel(
-                                    nomePaciente = nome,
-                                    cpf = cpf,
-                                    dataNascimento = formattedDate,
-                                    genero = genero,
-                                    endereco = endereco,
-                                    contato = contato,
-                                )
-
-                                val pacienteView = PacienteViewModel()
-                                pacienteView.createPaciente(paciente)
-
-                                // Logic to save the patient data
-                                keyboardController?.hide() // Hide keyboard
-                                // Navigate back or to another screen
                             },
                             modifier = Modifier
                                 .align(Alignment.CenterHorizontally)
                                 .padding(vertical = 16.dp),
                             colors = ButtonDefaults.buttonColors( // Set button colors
-                                containerColor = Azul4, // New name for background color
+                                containerColor = Azul4,
                                 contentColor = Color.White // Cor do Texto do Botão
                             )
 
 
                         ) {
-                            Text(text = "Cadastrar")
+                            Text(text = "Alterar")
                         }
                     }
                     BottomNavigation(
@@ -220,9 +168,8 @@ fun PacienteCadastro(navController: NavController) {
     )
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview (showSystemUi = true, showBackground = true)
-fun PacienteCadastroPreview() {
-    PacienteCadastro(navController = rememberNavController())
+fun MedicoAtualizarPreview() {
+    MedicoAtualizar(navController = rememberNavController())
 }
