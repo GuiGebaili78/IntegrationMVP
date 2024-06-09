@@ -1,5 +1,6 @@
 package com.example.integrationmvp.screen.medico
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -10,6 +11,10 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,8 +35,15 @@ import com.example.integrationmvp.viewModel.MedicoViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MedicoIndex(navController: NavController) {
-    val medicoView =  MedicoViewModel()
-    val medicos = medicoView.getMedicos()
+    val medicoView = remember { MedicoViewModel() }
+    val medicos by medicoView.medicos.collectAsState()
+
+    // Use LaunchedEffect to fetch medicos only once
+    LaunchedEffect(Unit) {
+        medicoView.fetchMedicos()
+    }
+
+    Log.d("MedicoVIew", "medicos: ${medicos.toString()}")
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -46,15 +58,15 @@ fun MedicoIndex(navController: NavController) {
         ) {
 
             Text(
-                text = "Médicos",
+                text = "Medicos",
                 textAlign = TextAlign.Center,
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
                 color = Azul4,
                 modifier = Modifier
                     .padding(bottom = 46.dp)
-
             )
+
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -70,28 +82,27 @@ fun MedicoIndex(navController: NavController) {
                         Azul4,
                         contentColor = Azul1
                     )
-
                 ) {
-                    Text(text = "Novo Médico")
+                    Text(text = "Novo Medico")
                 }
 
                 if (medicos.isNotEmpty()) {
                     medicos.forEach { medico ->
-                        MedicosCard(
+                        MedicoCard(
                             medico = medico,
-                            onEditClick = { navController.navigate("medicoatualizar")},
-                            onDeleteClick = { navController.navigate("medicoexcluir") },
-                            onChangeClick = { navController.navigate("medicoconsultar") }
+                            onEditClick = { navController.navigate("medicoatualizar/${medico.medicoId}") },
+                            onDeleteClick = { navController.navigate("medicoexcluir/${medico.medicoId}") },
+                            onDetailClick = { navController.navigate("medicoconsulta/${medico.medicoId}") }
                         )
                     }
                 } else {
                     Text(
-                        text = "Nenhum médico encontrado.",
+                        text = "Nenhum medico encontrado.",
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp)) // Add some space
             }
         }
 
@@ -100,7 +111,6 @@ fun MedicoIndex(navController: NavController) {
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
-
         )
     }
 }
@@ -108,20 +118,20 @@ fun MedicoIndex(navController: NavController) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MedicosCard(
+fun MedicoCard(
     medico: MedicoModel,
     onEditClick: () -> Unit,
     onDeleteClick: () -> Unit,
-    onChangeClick: () -> Unit
+    onDetailClick: () -> Unit
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 16.dp)
     ) {
-        Column(
+        Column( // Wrap content with a Column
             modifier = Modifier
-                .background(Azul1)
+                .background(Azul1) // Set text color for content inside
         ) {
 
             Text(text = "Nome: ${medico.nomeMedico}")
@@ -135,7 +145,7 @@ fun MedicosCard(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Button(onClick = onEditClick,
+                Button(onClick = onDetailClick,
                     colors = ButtonDefaults.buttonColors(
                         Azul4,
                         contentColor = Azul1
@@ -143,14 +153,14 @@ fun MedicosCard(
                     Text(text = "Consultar")
 
                 }
-                Button(onClick = onDeleteClick,
+                Button(onClick = onEditClick,
                     colors = ButtonDefaults.buttonColors(
                         Azul4,
                         contentColor = Azul1
                     )) {
                     Text(text = "Atualizar")
                 }
-                Button(onClick = onChangeClick,
+                Button(onClick = onDeleteClick,
                     colors = ButtonDefaults.buttonColors(
                         Azul4,
                         contentColor = Azul1

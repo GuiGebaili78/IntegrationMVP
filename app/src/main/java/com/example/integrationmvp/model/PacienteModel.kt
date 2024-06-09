@@ -2,7 +2,6 @@ package com.example.integrationmvp.model
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import java.time.LocalDate
 
 
 data class PacienteModel @RequiresApi(Build.VERSION_CODES.O) constructor(

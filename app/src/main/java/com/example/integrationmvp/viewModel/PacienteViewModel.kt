@@ -9,21 +9,30 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import retrofit2.HttpException
-
+import kotlinx.coroutines.CompletableDeferred
 class PacienteViewModel : ViewModel() {
     private val _pacientes = MutableStateFlow<List<PacienteModel>>(emptyList())
     val pacientes: StateFlow<List<PacienteModel>> get() = _pacientes
 
-    init {
-        fetchPacientes()
-    }
+    private var isFetching = false
 
-    private fun fetchPacientes() {
-        viewModelScope.launch {
-            try {
-                _pacientes.value = PacienteApiClient.apiService.getPacientes()
-            } catch (e: Exception) {
-                // Handle error
+    fun fetchPacientes() {
+        if (!isFetching) {
+            isFetching = true
+            viewModelScope.launch {
+                try {
+                    val pacientes = PacienteApiClient.apiService.getPacientes()
+                    _pacientes.value = pacientes
+                    Log.d("PacienteAPI", "sucesso: ${_pacientes.value.toString()}")
+                } catch (e: HttpException) {
+                    val responseBody = e.response()?.errorBody()?.string()
+                    Log.d("PacienteAPI", "Erro HTTP: ${e.code()} ${e.message()}")
+                    Log.d("PacienteAPI", "Resposta de erro: $responseBody")
+                } catch (e: Exception) {
+                    Log.d("PacienteAPI", "Erro geral: ${e.toString()}")
+                } finally {
+                    isFetching = false
+                }
             }
         }
     }
@@ -34,19 +43,17 @@ class PacienteViewModel : ViewModel() {
                 val newPaciente = PacienteApiClient.apiService.createPaciente(paciente)
                 _pacientes.value = _pacientes.value + newPaciente
             } catch (e: HttpException) {
-                // Captura e trata erros de HTTP
                 val responseBody = e.response()?.errorBody()?.string()
                 Log.d("PacienteAPI", "Erro HTTP: ${e.code()} ${e.message()}")
                 Log.d("PacienteAPI", "Resposta de erro: $responseBody")
             } catch (e: Exception) {
-                // Captura e trata outros erros
                 Log.d("PacienteAPI", "Erro geral: ${e.toString()}")
             }
         }
     }
 
     fun getPaciente(id: Long): PacienteModel? {
-        return _pacientes.value?.find { it.pacienteId == id }
+        return _pacientes.value.find { it.pacienteId == id }
     }
 
     fun getPacientes(): List<PacienteModel> {
@@ -59,7 +66,7 @@ class PacienteViewModel : ViewModel() {
                 val updatedPaciente = PacienteApiClient.apiService.updatePaciente(id, paciente)
                 _pacientes.value = _pacientes.value.map { if (it.pacienteId == id) updatedPaciente else it }
             } catch (e: Exception) {
-                // Handle error
+                Log.d("PacienteAPI", "Erro geral: ${e.toString()}")
             }
         }
     }
@@ -70,7 +77,7 @@ class PacienteViewModel : ViewModel() {
                 PacienteApiClient.apiService.deletePaciente(id)
                 _pacientes.value = _pacientes.value.filter { it.pacienteId != id }
             } catch (e: Exception) {
-                // Handle error
+                Log.d("PacienteAPI", "Erro geral: ${e.toString()}")
             }
         }
     }

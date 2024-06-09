@@ -1,5 +1,6 @@
 package com.example.integrationmvp.screen.paciente
 
+import android.util.Log
 import com.example.integrationmvp.ui.theme.Azul1
 import com.example.integrationmvp.ui.theme.Azul5
 import androidx.compose.foundation.layout.*
@@ -25,9 +26,10 @@ import com.example.integrationmvp.viewModel.PacienteViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PacienteConsulta(navController: NavController) {
+fun PacienteConsulta(navController: NavController, pacienteId: Long) {
     val pacienteView =  PacienteViewModel()
-    val paciente = pacienteView.getPaciente(1L)
+    val paciente = pacienteView.getPaciente(pacienteId)
+    Log.d("PacienteConsulta", "eaee????: ${paciente.toString()}")
 
     Scaffold(
         topBar = {
@@ -75,5 +77,5 @@ fun PacienteConsulta(navController: NavController) {
 @Preview (showSystemUi = true, showBackground = true)
 @Composable
 fun PacienteConsultaPreview() {
-    PacienteConsulta(navController = rememberNavController())
+    PacienteConsulta(navController = rememberNavController(), 1L)
 }

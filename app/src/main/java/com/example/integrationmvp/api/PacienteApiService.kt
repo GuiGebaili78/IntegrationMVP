@@ -4,6 +4,7 @@ import com.example.integrationmvp.model.PacienteModel
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
+import okhttp3.OkHttpClient
 
 
 interface PacienteApiService {
@@ -24,8 +25,9 @@ interface PacienteApiService {
 
 object PacienteApiClient {
     private val retrofit: Retrofit by lazy {
+
         Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:5041/") // Substitua pela URL da sua API
+            .baseUrl("http://10.0.2.2:5041/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

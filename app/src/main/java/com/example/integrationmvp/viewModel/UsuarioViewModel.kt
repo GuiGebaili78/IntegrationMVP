@@ -9,21 +9,30 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import retrofit2.HttpException
-
+import kotlinx.coroutines.CompletableDeferred
 class UsuarioViewModel : ViewModel() {
     private val _usuarios = MutableStateFlow<List<UsuarioModel>>(emptyList())
     val usuarios: StateFlow<List<UsuarioModel>> get() = _usuarios
 
-    init {
-        fetchUsuarios()
-    }
+    private var isFetching = false
 
-    private fun fetchUsuarios() {
-        viewModelScope.launch {
-            try {
-                _usuarios.value = UsuarioApiClient.apiService.getUsuarios()
-            } catch (e: Exception) {
-                // Handle error
+    fun fetchUsuarios() {
+        if (!isFetching) {
+            isFetching = true
+            viewModelScope.launch {
+                try {
+                    val usuarios = UsuarioApiClient.apiService.getUsuarios()
+                    _usuarios.value = usuarios
+                    Log.d("UsuarioAPI", "sucesso: ${_usuarios.value.toString()}")
+                } catch (e: HttpException) {
+                    val responseBody = e.response()?.errorBody()?.string()
+                    Log.d("UsuarioAPI", "Erro HTTP: ${e.code()} ${e.message()}")
+                    Log.d("UsuarioAPI", "Resposta de erro: $responseBody")
+                } catch (e: Exception) {
+                    Log.d("UsuarioAPI", "Erro geral: ${e.toString()}")
+                } finally {
+                    isFetching = false
+                }
             }
         }
     }
@@ -34,19 +43,17 @@ class UsuarioViewModel : ViewModel() {
                 val newUsuario = UsuarioApiClient.apiService.createUsuario(usuario)
                 _usuarios.value = _usuarios.value + newUsuario
             } catch (e: HttpException) {
-                // Captura e trata erros de HTTP
                 val responseBody = e.response()?.errorBody()?.string()
                 Log.d("UsuarioAPI", "Erro HTTP: ${e.code()} ${e.message()}")
                 Log.d("UsuarioAPI", "Resposta de erro: $responseBody")
             } catch (e: Exception) {
-                // Captura e trata outros erros
                 Log.d("UsuarioAPI", "Erro geral: ${e.toString()}")
             }
         }
     }
 
     fun getUsuario(id: Long): UsuarioModel? {
-        return _usuarios.value?.find { it.usuarioId == id }
+        return _usuarios.value.find { it.usuarioId == id }
     }
 
     fun getUsuarios(): List<UsuarioModel> {
@@ -59,7 +66,7 @@ class UsuarioViewModel : ViewModel() {
                 val updatedUsuario = UsuarioApiClient.apiService.updateUsuario(id, usuario)
                 _usuarios.value = _usuarios.value.map { if (it.usuarioId == id) updatedUsuario else it }
             } catch (e: Exception) {
-                // Handle error
+                Log.d("UsuarioAPI", "Erro geral: ${e.toString()}")
             }
         }
     }
@@ -70,7 +77,7 @@ class UsuarioViewModel : ViewModel() {
                 UsuarioApiClient.apiService.deleteUsuario(id)
                 _usuarios.value = _usuarios.value.filter { it.usuarioId != id }
             } catch (e: Exception) {
-                // Handle error
+                Log.d("UsuarioAPI", "Erro geral: ${e.toString()}")
             }
         }
     }

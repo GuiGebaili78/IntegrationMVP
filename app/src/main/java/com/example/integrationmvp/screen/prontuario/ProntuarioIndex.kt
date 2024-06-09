@@ -1,4 +1,4 @@
-package com.example.integrationmvp.screen.usuario
+package com.example.integrationmvp.screen.prontuario
 
 import android.util.Log
 import androidx.compose.foundation.background
@@ -26,24 +26,24 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.integrationmvp.component.BottomNavigation
-import com.example.integrationmvp.model.UsuarioModel
+import com.example.integrationmvp.model.ProntuarioModel
 import com.example.integrationmvp.ui.theme.Azul1
 import com.example.integrationmvp.ui.theme.Azul4
-import com.example.integrationmvp.viewModel.UsuarioViewModel
-
+import com.example.integrationmvp.viewModel.ProntuarioViewModel
+import com.example.integrationmvp.viewModel.PacienteViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UsuarioIndex(navController: NavController) {
-    val usuarioView = remember { UsuarioViewModel() }
-    val usuarios by usuarioView.usuarios.collectAsState()
+fun ProntuarioIndex(navController: NavController) {
+    val prontuarioView = remember { ProntuarioViewModel() }
+    val prontuarios by prontuarioView.prontuarios.collectAsState()
 
-    // Use LaunchedEffect to fetch usuarios only once
+    // Use LaunchedEffect to fetch prontuarios only once
     LaunchedEffect(Unit) {
-        usuarioView.fetchUsuarios()
+        prontuarioView.fetchProntuarios()
     }
 
-    Log.d("UsuarioVIew", "usuarios: ${usuarios.toString()}")
+    Log.d("ProntuarioVIew", "prontuarios: ${prontuarios.toString()}")
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -56,9 +56,8 @@ fun UsuarioIndex(navController: NavController) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             Text(
-                text = "Usuarios",
+                text = "Prontuarios",
                 textAlign = TextAlign.Center,
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
@@ -66,7 +65,6 @@ fun UsuarioIndex(navController: NavController) {
                 modifier = Modifier
                     .padding(bottom = 46.dp)
             )
-
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -74,7 +72,7 @@ fun UsuarioIndex(navController: NavController) {
                     .verticalScroll(rememberScrollState())
             ) {
                 Button(
-                    onClick = { navController.navigate("UsuarioCadastro") },
+                    onClick = { navController.navigate("ProntuarioCadastro") },
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .padding(bottom = 16.dp),
@@ -83,26 +81,26 @@ fun UsuarioIndex(navController: NavController) {
                         contentColor = Azul1
                     )
                 ) {
-                    Text(text = "Novo Usuario")
+                    Text(text = "Novo Prontuario")
                 }
 
-                if (usuarios.isNotEmpty()) {
-                    usuarios.forEach { usuario ->
-                        UsuarioCard(
-                            usuario = usuario,
-                            onEditClick = { navController.navigate("usuarioatualizar/${usuario.usuarioId}") },
-                            onDeleteClick = { navController.navigate("usuarioexcluir/${usuario.usuarioId}") },
-                            onDetailClick = { navController.navigate("usuarioconsulta/${usuario.usuarioId}") }
+                if (prontuarios.isNotEmpty()) {
+                    prontuarios.forEach { prontuario ->
+                        ProntuarioCard(
+                            prontuario = prontuario,
+                            onEditClick = { navController.navigate("prontuarioatualizar/${prontuario.prontuarioId}") },
+                            onDeleteClick = { navController.navigate("prontuarioexcluir/${prontuario.prontuarioId}") },
+                            onDetailClick = { navController.navigate("prontuarioprontuario/${prontuario.prontuarioId}") }
                         )
                     }
                 } else {
                     Text(
-                        text = "Nenhum usuario encontrado.",
+                        text = "Nenhum prontuario encontrado.",
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
                 }
 
-                Spacer(modifier = Modifier.height(16.dp)) // Add some space
+                Spacer(modifier = Modifier.height(16.dp))
             }
         }
 
@@ -115,11 +113,10 @@ fun UsuarioIndex(navController: NavController) {
     }
 }
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UsuarioCard(
-    usuario: UsuarioModel,
+fun ProntuarioCard(
+    prontuario: ProntuarioModel,
     onEditClick: () -> Unit,
     onDeleteClick: () -> Unit,
     onDetailClick: () -> Unit
@@ -129,14 +126,18 @@ fun UsuarioCard(
             .fillMaxWidth()
             .padding(bottom = 16.dp)
     ) {
-        Column( // Wrap content with a Column
+        Column(
             modifier = Modifier
-                .background(Azul1) // Set text color for content inside
+                .background(Azul1)
         ) {
-
-            Text(text = "Nome: ${usuario.nomeUsuario}")
-            Text(text = "Email: ${usuario.emailUsuario}")
-            Text(text = "Senha: ${usuario.senhaUsuario}")
+            Text(text = "Paciente: ${prontuario.pacienteId}")
+            Text(text = "Médico: ${prontuario.medicoId}")
+            Text(text = "Histórico Paciente: ${prontuario.historicoPaciente}")
+            Text(text = "Histórico Familiar: ${prontuario.historicoFamiliar}")
+            Text(text = "Medicamentos: ${prontuario.medicamento}")
+            Text(text = "Triagem: ${prontuario.triagem}")
+            Text(text = "Exames: ${prontuario.exames}")
+            Text(text = "Data Prontuário: ${prontuario.dataProntuario}")
 
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -149,8 +150,7 @@ fun UsuarioCard(
                         Azul4,
                         contentColor = Azul1
                     )) {
-                    Text(text = "Consultar")
-
+                    Text(text = "Prontuarior")
                 }
                 Button(onClick = onEditClick,
                     colors = ButtonDefaults.buttonColors(
@@ -165,18 +165,15 @@ fun UsuarioCard(
                         contentColor = Azul1
                     )) {
                     Text(text = "Excluir")
-
                 }
             }
         }
     }
-
 }
-
 
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
-fun UsuarioIndexPreview() {
+fun ProntuarioIndexPreview() {
     val navController = rememberNavController()
-    UsuarioIndex(navController = navController)
+    ProntuarioIndex(navController = navController)
 }

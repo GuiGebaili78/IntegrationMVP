@@ -9,21 +9,30 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import retrofit2.HttpException
-
+import kotlinx.coroutines.CompletableDeferred
 class MedicoViewModel : ViewModel() {
     private val _medicos = MutableStateFlow<List<MedicoModel>>(emptyList())
     val medicos: StateFlow<List<MedicoModel>> get() = _medicos
 
-    init {
-        fetchMedicos()
-    }
+    private var isFetching = false
 
-    private fun fetchMedicos() {
-        viewModelScope.launch {
-            try {
-                _medicos.value = MedicoApiClient.apiService.getMedicos()
-            } catch (e: Exception) {
-
+    fun fetchMedicos() {
+        if (!isFetching) {
+            isFetching = true
+            viewModelScope.launch {
+                try {
+                    val medicos = MedicoApiClient.apiService.getMedicos()
+                    _medicos.value = medicos
+                    Log.d("MedicoAPI", "sucesso: ${_medicos.value.toString()}")
+                } catch (e: HttpException) {
+                    val responseBody = e.response()?.errorBody()?.string()
+                    Log.d("MedicoAPI", "Erro HTTP: ${e.code()} ${e.message()}")
+                    Log.d("MedicoAPI", "Resposta de erro: $responseBody")
+                } catch (e: Exception) {
+                    Log.d("MedicoAPI", "Erro geral: ${e.toString()}")
+                } finally {
+                    isFetching = false
+                }
             }
         }
     }
@@ -34,19 +43,17 @@ class MedicoViewModel : ViewModel() {
                 val newMedico = MedicoApiClient.apiService.createMedico(medico)
                 _medicos.value = _medicos.value + newMedico
             } catch (e: HttpException) {
-                // Captura e trata erros de HTTP
                 val responseBody = e.response()?.errorBody()?.string()
-                Log.d("MédicoAPI", "Erro HTTP: ${e.code()} ${e.message()}")
-                Log.d("MédicoAPI", "Resposta de erro: $responseBody")
+                Log.d("MedicoAPI", "Erro HTTP: ${e.code()} ${e.message()}")
+                Log.d("MedicoAPI", "Resposta de erro: $responseBody")
             } catch (e: Exception) {
-                // Captura e trata outros erros
-                Log.d("MédicoAPI", "Erro geral: ${e.toString()}")
+                Log.d("MedicoAPI", "Erro geral: ${e.toString()}")
             }
         }
     }
 
     fun getMedico(id: Long): MedicoModel? {
-        return _medicos.value?.find { it.medicoId == id }
+        return _medicos.value.find { it.medicoId == id }
     }
 
     fun getMedicos(): List<MedicoModel> {
@@ -59,7 +66,7 @@ class MedicoViewModel : ViewModel() {
                 val updatedMedico = MedicoApiClient.apiService.updateMedico(id, medico)
                 _medicos.value = _medicos.value.map { if (it.medicoId == id) updatedMedico else it }
             } catch (e: Exception) {
-
+                Log.d("MedicoAPI", "Erro geral: ${e.toString()}")
             }
         }
     }
@@ -70,7 +77,7 @@ class MedicoViewModel : ViewModel() {
                 MedicoApiClient.apiService.deleteMedico(id)
                 _medicos.value = _medicos.value.filter { it.medicoId != id }
             } catch (e: Exception) {
-
+                Log.d("MedicoAPI", "Erro geral: ${e.toString()}")
             }
         }
     }

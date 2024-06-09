@@ -1,4 +1,4 @@
-package com.example.integrationmvp.screen.usuario
+package com.example.integrationmvp.screen.consulta
 
 import android.util.Log
 import androidx.compose.foundation.background
@@ -26,24 +26,24 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.integrationmvp.component.BottomNavigation
-import com.example.integrationmvp.model.UsuarioModel
+import com.example.integrationmvp.model.ConsultaModel
 import com.example.integrationmvp.ui.theme.Azul1
 import com.example.integrationmvp.ui.theme.Azul4
-import com.example.integrationmvp.viewModel.UsuarioViewModel
-
+import com.example.integrationmvp.viewModel.ConsultaViewModel
+import com.example.integrationmvp.viewModel.PacienteViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UsuarioIndex(navController: NavController) {
-    val usuarioView = remember { UsuarioViewModel() }
-    val usuarios by usuarioView.usuarios.collectAsState()
+fun ConsultaIndex(navController: NavController) {
+    val consultaView = remember { ConsultaViewModel() }
+    val consultas by consultaView.consultas.collectAsState()
 
-    // Use LaunchedEffect to fetch usuarios only once
+    // Use LaunchedEffect to fetch consultas only once
     LaunchedEffect(Unit) {
-        usuarioView.fetchUsuarios()
+        consultaView.fetchConsultas()
     }
 
-    Log.d("UsuarioVIew", "usuarios: ${usuarios.toString()}")
+    Log.d("ConsultaVIew", "consultas: ${consultas.toString()}")
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -56,9 +56,8 @@ fun UsuarioIndex(navController: NavController) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             Text(
-                text = "Usuarios",
+                text = "Consultas",
                 textAlign = TextAlign.Center,
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
@@ -66,7 +65,6 @@ fun UsuarioIndex(navController: NavController) {
                 modifier = Modifier
                     .padding(bottom = 46.dp)
             )
-
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -74,7 +72,7 @@ fun UsuarioIndex(navController: NavController) {
                     .verticalScroll(rememberScrollState())
             ) {
                 Button(
-                    onClick = { navController.navigate("UsuarioCadastro") },
+                    onClick = { navController.navigate("ConsultaCadastro") },
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .padding(bottom = 16.dp),
@@ -83,26 +81,26 @@ fun UsuarioIndex(navController: NavController) {
                         contentColor = Azul1
                     )
                 ) {
-                    Text(text = "Novo Usuario")
+                    Text(text = "Novo Consulta")
                 }
 
-                if (usuarios.isNotEmpty()) {
-                    usuarios.forEach { usuario ->
-                        UsuarioCard(
-                            usuario = usuario,
-                            onEditClick = { navController.navigate("usuarioatualizar/${usuario.usuarioId}") },
-                            onDeleteClick = { navController.navigate("usuarioexcluir/${usuario.usuarioId}") },
-                            onDetailClick = { navController.navigate("usuarioconsulta/${usuario.usuarioId}") }
+                if (consultas.isNotEmpty()) {
+                    consultas.forEach { consulta ->
+                        ConsultaCard(
+                            consulta = consulta,
+                            onEditClick = { navController.navigate("consultaatualizar/${consulta.consultaId}") },
+                            onDeleteClick = { navController.navigate("consultaexcluir/${consulta.consultaId}") },
+                            onDetailClick = { navController.navigate("consultaconsulta/${consulta.consultaId}") }
                         )
                     }
                 } else {
                     Text(
-                        text = "Nenhum usuario encontrado.",
+                        text = "Nenhum consulta encontrado.",
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
                 }
 
-                Spacer(modifier = Modifier.height(16.dp)) // Add some space
+                Spacer(modifier = Modifier.height(16.dp))
             }
         }
 
@@ -115,11 +113,10 @@ fun UsuarioIndex(navController: NavController) {
     }
 }
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UsuarioCard(
-    usuario: UsuarioModel,
+fun ConsultaCard(
+    consulta: ConsultaModel,
     onEditClick: () -> Unit,
     onDeleteClick: () -> Unit,
     onDetailClick: () -> Unit
@@ -129,14 +126,16 @@ fun UsuarioCard(
             .fillMaxWidth()
             .padding(bottom = 16.dp)
     ) {
-        Column( // Wrap content with a Column
+        Column(
             modifier = Modifier
-                .background(Azul1) // Set text color for content inside
+                .background(Azul1)
         ) {
-
-            Text(text = "Nome: ${usuario.nomeUsuario}")
-            Text(text = "Email: ${usuario.emailUsuario}")
-            Text(text = "Senha: ${usuario.senhaUsuario}")
+            Text(text = "Paciente: ${consulta.pacienteId}")
+            Text(text = "Médico: ${consulta.medicoId}")
+            Text(text = "Data: ${consulta.dataConsulta}")
+            Text(text = "Hora: ${consulta.horaConsulta}")
+            Text(text = "Local: ${consulta.localConsulta}")
+            Text(text = "Mensagem: ${consulta.mensagem}")
 
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -150,7 +149,6 @@ fun UsuarioCard(
                         contentColor = Azul1
                     )) {
                     Text(text = "Consultar")
-
                 }
                 Button(onClick = onEditClick,
                     colors = ButtonDefaults.buttonColors(
@@ -165,18 +163,15 @@ fun UsuarioCard(
                         contentColor = Azul1
                     )) {
                     Text(text = "Excluir")
-
                 }
             }
         }
     }
-
 }
-
 
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
-fun UsuarioIndexPreview() {
+fun ConsultaIndexPreview() {
     val navController = rememberNavController()
-    UsuarioIndex(navController = navController)
+    ConsultaIndex(navController = navController)
 }

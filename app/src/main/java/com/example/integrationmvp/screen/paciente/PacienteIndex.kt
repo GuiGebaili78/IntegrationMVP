@@ -1,5 +1,6 @@
 package com.example.integrationmvp.screen.paciente
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -10,6 +11,10 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,8 +35,15 @@ import com.example.integrationmvp.viewModel.PacienteViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PacienteIndex(navController: NavController) {
-    val pacienteView =  PacienteViewModel()
-    val pacientes = pacienteView.getPacientes()
+    val pacienteView = remember { PacienteViewModel() }
+    val pacientes by pacienteView.pacientes.collectAsState()
+
+    // Use LaunchedEffect to fetch pacientes only once
+    LaunchedEffect(Unit) {
+        pacienteView.fetchPacientes()
+    }
+
+    Log.d("PacienteVIew", "pacientes: ${pacientes.toString()}")
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -53,15 +65,15 @@ fun PacienteIndex(navController: NavController) {
                 color = Azul4,
                 modifier = Modifier
                     .padding(bottom = 46.dp)
-
             )
+
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(16.dp)
                     .verticalScroll(rememberScrollState())
             ) {
-                Button( // Button in the column
+                Button(
                     onClick = { navController.navigate("PacienteCadastro") },
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
@@ -70,7 +82,6 @@ fun PacienteIndex(navController: NavController) {
                         Azul4,
                         contentColor = Azul1
                     )
-
                 ) {
                     Text(text = "Novo Paciente")
                 }
@@ -79,9 +90,9 @@ fun PacienteIndex(navController: NavController) {
                     pacientes.forEach { paciente ->
                         PacienteCard(
                             paciente = paciente,
-                            onEditClick = { navController.navigate("pacienteatualizar")},
-                            onDeleteClick = { navController.navigate("pacienteexcluir") },
-                            onChangeClick = { navController.navigate("pacienteconsultar") }
+                            onEditClick = { navController.navigate("pacienteatualizar/${paciente.pacienteId}") },
+                            onDeleteClick = { navController.navigate("pacienteexcluir/${paciente.pacienteId}") },
+                            onDetailClick = { navController.navigate("pacienteconsulta/${paciente.pacienteId}") }
                         )
                     }
                 } else {
@@ -91,7 +102,6 @@ fun PacienteIndex(navController: NavController) {
                     )
                 }
 
-                // Spacer to push content up
                 Spacer(modifier = Modifier.height(16.dp)) // Add some space
             }
         }
@@ -101,7 +111,6 @@ fun PacienteIndex(navController: NavController) {
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
-
         )
     }
 }
@@ -113,7 +122,7 @@ fun PacienteCard(
     paciente: PacienteModel,
     onEditClick: () -> Unit,
     onDeleteClick: () -> Unit,
-    onChangeClick: () -> Unit
+    onDetailClick: () -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -138,7 +147,7 @@ fun PacienteCard(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Button(onClick = onEditClick,
+                Button(onClick = onDetailClick,
                     colors = ButtonDefaults.buttonColors(
                         Azul4,
                         contentColor = Azul1
@@ -146,14 +155,14 @@ fun PacienteCard(
                     Text(text = "Consultar")
 
                 }
-                Button(onClick = onDeleteClick,
+                Button(onClick = onEditClick,
                     colors = ButtonDefaults.buttonColors(
                         Azul4,
                         contentColor = Azul1
                     )) {
                     Text(text = "Atualizar")
                 }
-                Button(onClick = onChangeClick,
+                Button(onClick = onDeleteClick,
                     colors = ButtonDefaults.buttonColors(
                         Azul4,
                         contentColor = Azul1
