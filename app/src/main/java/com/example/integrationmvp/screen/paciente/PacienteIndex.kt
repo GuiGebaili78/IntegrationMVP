@@ -38,12 +38,15 @@ fun PacienteIndex(navController: NavController) {
     val pacienteView = remember { PacienteViewModel() }
     val pacientes by pacienteView.pacientes.collectAsState()
 
-    // Use LaunchedEffect to fetch pacientes only once
     LaunchedEffect(Unit) {
         pacienteView.fetchPacientes()
     }
 
-    Log.d("PacienteVIew", "pacientes: ${pacientes.toString()}")
+    LaunchedEffect(pacientes) {
+        Log.d("PacienteView", "pacientes: ${pacientes.toString()}")
+    }
+
+    Log.d("PacienteView", "pacientes: ${pacientes.toString()}")
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -91,7 +94,8 @@ fun PacienteIndex(navController: NavController) {
                         PacienteCard(
                             paciente = paciente,
                             onEditClick = { navController.navigate("pacienteatualizar/${paciente.pacienteId}") },
-                            onDeleteClick = { navController.navigate("pacienteexcluir/${paciente.pacienteId}") },
+                            onDeleteClick = { pacienteView.deletePaciente(paciente.pacienteId)
+                                pacienteView.fetchPacientes()},
 
                         )
                     }
@@ -161,6 +165,7 @@ fun PacienteCard(
                         contentColor = Azul1
                     )) {
                     Text(text = "Excluir")
+
 
                 }
             }

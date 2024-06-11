@@ -37,12 +37,15 @@ fun ConsultaIndex(navController: NavController) {
     val consultaView = remember { ConsultaViewModel() }
     val consultas by consultaView.consultas.collectAsState()
 
-
     LaunchedEffect(Unit) {
         consultaView.fetchConsultas()
     }
 
-    Log.d("ConsultaVIew", "consultas: ${consultas.toString()}")
+    LaunchedEffect(consultas) {
+        Log.d("ConsultaView", "consultas: ${consultas.toString()}")
+    }
+
+    Log.d("ConsultaView", "consultas: ${consultas.toString()}")
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -88,7 +91,8 @@ fun ConsultaIndex(navController: NavController) {
                         ConsultaCard(
                             consulta = consulta,
                             onEditClick = { navController.navigate("consultaatualizar/${consulta.consultaId}") },
-                            onDeleteClick = { navController.navigate("consultaexcluir/${consulta.consultaId}") },
+                            onDeleteClick = { consultaView.deleteConsulta(consulta.consultaId)
+                                consultaView.fetchConsultas()},
 
                         )
                     }

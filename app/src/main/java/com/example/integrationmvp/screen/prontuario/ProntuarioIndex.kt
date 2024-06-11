@@ -43,7 +43,11 @@ fun ProntuarioIndex(navController: NavController) {
         prontuarioView.fetchProntuarios()
     }
 
-    Log.d("ProntuarioVIew", "prontuarios: ${prontuarios.toString()}")
+    LaunchedEffect(prontuarios) {
+        Log.d("ProntuarioView", "prontuarios: ${prontuarios.toString()}")
+    }
+
+    Log.d("ProntuarioView", "prontuarios: ${prontuarios.toString()}")
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -89,7 +93,8 @@ fun ProntuarioIndex(navController: NavController) {
                         ProntuarioCard(
                             prontuario = prontuario,
                             onEditClick = { navController.navigate("prontuarioatualizar/${prontuario.prontuarioId}") },
-                            onDeleteClick = { navController.navigate("prontuarioexcluir/${prontuario.prontuarioId}") },
+                            onDeleteClick = {prontuarioView.deleteProntuario(prontuario.prontuarioId)
+                                prontuarioView.fetchProntuarios()},
 
                         )
                     }

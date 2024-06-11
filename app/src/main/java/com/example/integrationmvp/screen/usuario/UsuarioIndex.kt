@@ -43,6 +43,10 @@ fun UsuarioIndex(navController: NavController) {
         usuarioView.fetchUsuarios()
     }
 
+    LaunchedEffect(usuarios) {
+        Log.d("UsuarioView", "usuarios: ${usuarios.toString()}")
+    }
+
     Log.d("UsuarioVIew", "usuarios: ${usuarios.toString()}")
 
     Box(
@@ -91,7 +95,8 @@ fun UsuarioIndex(navController: NavController) {
                         UsuarioCard(
                             usuario = usuario,
                             onEditClick = { navController.navigate("usuarioatualizar/${usuario.usuarioId}") },
-                            onDeleteClick = { navController.navigate("usuarioexcluir/${usuario.usuarioId}") },
+                            onDeleteClick = { usuarioView.deleteUsuario(usuario.usuarioId)
+                                usuarioView.fetchUsuarios()},
 
                             )
                     }

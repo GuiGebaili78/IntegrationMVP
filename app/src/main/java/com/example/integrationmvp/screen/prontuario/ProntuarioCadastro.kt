@@ -37,11 +37,11 @@ import java.time.format.DateTimeFormatter
 fun ProntuarioCadastro(navController: NavController, prontuarioViewModel: ProntuarioViewModel = ProntuarioViewModel()) {
     var pacienteId by remember { mutableStateOf("") }
     var medicoId by remember { mutableStateOf("") }
-    var historicoPaciente by remember { mutableStateOf("") }
-    var historicoFamiliar by remember { mutableStateOf("") }
-    var medicamento by remember { mutableStateOf("") }
-    var triagem by remember { mutableStateOf("") }
-    var exames by remember { mutableStateOf("") }
+    var historicoPaciente by remember { mutableStateOf("historico") }
+    var historicoFamiliar by remember { mutableStateOf("historico") }
+    var medicamento by remember { mutableStateOf("medicamentos") }
+    var triagem by remember { mutableStateOf("triagem") }
+    var exames by remember { mutableStateOf("exames") }
     var dataProntuario by remember { mutableStateOf("01/01/2023") }
 
     val context = LocalContext.current
@@ -150,7 +150,7 @@ fun ProntuarioCadastro(navController: NavController, prontuarioViewModel: Prontu
                             label = "Histórico Paciente",
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(16.dp),
+                                .padding(4.dp),
                             keyboardType = KeyboardType.Text,
                             atualizarValor = { novoValor ->
                                 historicoPaciente = novoValor
@@ -165,7 +165,7 @@ fun ProntuarioCadastro(navController: NavController, prontuarioViewModel: Prontu
                             label = "Histórico Familiar",
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(16.dp),
+                                .padding(4.dp),
                             keyboardType = KeyboardType.Text,
                             atualizarValor = { novoValor ->
                                 historicoFamiliar = novoValor
@@ -180,7 +180,7 @@ fun ProntuarioCadastro(navController: NavController, prontuarioViewModel: Prontu
                             label = "Medicamento",
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(16.dp),
+                                .padding(4.dp),
                             keyboardType = KeyboardType.Text,
                             atualizarValor = { novoValor ->
                                 medicamento = novoValor
@@ -195,7 +195,7 @@ fun ProntuarioCadastro(navController: NavController, prontuarioViewModel: Prontu
                             label = "Triagem",
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(16.dp),
+                                .padding(4.dp),
                             keyboardType = KeyboardType.Text,
                             atualizarValor = { novoValor ->
                                 triagem = novoValor
@@ -210,7 +210,7 @@ fun ProntuarioCadastro(navController: NavController, prontuarioViewModel: Prontu
                             label = "Exames",
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(16.dp),
+                                .padding(4.dp),
                             keyboardType = KeyboardType.Text,
                             atualizarValor = { novoValor ->
                                 exames = novoValor
@@ -225,7 +225,7 @@ fun ProntuarioCadastro(navController: NavController, prontuarioViewModel: Prontu
                             label = "Data",
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(16.dp),
+                                .padding(4.dp),
                             keyboardType = KeyboardType.Number,
                             atualizarValor = { novoValor ->
                                 dataProntuario = novoValor

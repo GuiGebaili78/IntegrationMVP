@@ -38,12 +38,16 @@ fun MedicoIndex(navController: NavController) {
     val medicoView = remember { MedicoViewModel() }
     val medicos by medicoView.medicos.collectAsState()
 
-    // Use LaunchedEffect to fetch medicos only once
+
     LaunchedEffect(Unit) {
         medicoView.fetchMedicos()
     }
 
-    Log.d("MedicoVIew", "medicos: ${medicos.toString()}")
+    LaunchedEffect(medicos) {
+        Log.d("MedicoView", "medicos: ${medicos.toString()}")
+    }
+
+    Log.d("MedicoView", "medicos: ${medicos.toString()}")
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -91,7 +95,8 @@ fun MedicoIndex(navController: NavController) {
                         MedicoCard(
                             medico = medico,
                             onEditClick = { navController.navigate("medicoatualizar/${medico.medicoId}") },
-                            onDeleteClick = { navController.navigate("medicoexcluir/${medico.medicoId}") },
+                            onDeleteClick = { medicoView.deleteMedico(medico.medicoId)
+                                medicoView.fetchMedicos()},
 
                         )
                     }
