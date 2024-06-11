@@ -72,8 +72,13 @@ class MainActivity : ComponentActivity() {
                                 pacienteId = backStackEntry.arguments?.getLong("pacienteId") ?: -1L
                             )
                         }
-                        composable(route = "pacienteatualizar", ) {
-                            PacienteAtualizar(navController = navController)
+                        composable(route = "pacienteatualizar/{pacienteId}", arguments = listOf(
+                            navArgument("pacienteId") { type = NavType.LongType })) {
+                                backStackEntry ->
+                            PacienteAtualizar(
+                                navController = navController,
+                                pacienteId = backStackEntry.arguments?.getLong("pacienteId") ?: -1L
+                            )
                         }
 
 

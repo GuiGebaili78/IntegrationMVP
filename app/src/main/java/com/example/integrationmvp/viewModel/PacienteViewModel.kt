@@ -1,6 +1,7 @@
 package com.example.integrationmvp.viewModel
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.integrationmvp.api.PacienteApiClient
@@ -13,6 +14,9 @@ import kotlinx.coroutines.CompletableDeferred
 class PacienteViewModel : ViewModel() {
     private val _pacientes = MutableStateFlow<List<PacienteModel>>(emptyList())
     val pacientes: StateFlow<List<PacienteModel>> get() = _pacientes
+
+    private val _selectedPaciente = MutableStateFlow<PacienteModel?>(null)
+    val selectedPaciente: StateFlow<PacienteModel?> get() = _selectedPaciente
 
     private var isFetching = false
 
@@ -52,8 +56,19 @@ class PacienteViewModel : ViewModel() {
         }
     }
 
-    fun getPaciente(id: Long): PacienteModel? {
-        return _pacientes.value.find { it.pacienteId == id }
+    fun getPaciente(id: Long) {
+        viewModelScope.launch {
+            try {
+                val paciente = PacienteApiClient.apiService.getPaciente(id)
+                _selectedPaciente.value = paciente
+            } catch (e: HttpException) {
+                val responseBody = e.response()?.errorBody()?.string()
+                Log.d("PacienteAPI", "Erro HTTP: ${e.code()} ${e.message()}")
+                Log.d("PacienteAPI", "Resposta de erro: $responseBody")
+            } catch (e: Exception) {
+                Log.d("PacienteAPI", "Erro geral: ${e.toString()}")
+            }
+        }
     }
 
     fun getPacientes(): List<PacienteModel> {
@@ -65,6 +80,10 @@ class PacienteViewModel : ViewModel() {
             try {
                 val updatedPaciente = PacienteApiClient.apiService.updatePaciente(id, paciente)
                 _pacientes.value = _pacientes.value.map { if (it.pacienteId == id) updatedPaciente else it }
+            } catch (e: HttpException) {
+                val responseBody = e.response()?.errorBody()?.string()
+                Log.d("PacienteAPI", "Erro HTTP: ${e.code()} ${e.message()}")
+                Log.d("PacienteAPI", "Resposta de erro: $responseBody")
             } catch (e: Exception) {
                 Log.d("PacienteAPI", "Erro geral: ${e.toString()}")
             }

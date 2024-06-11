@@ -1,6 +1,9 @@
 package com.example.integrationmvp.screen.paciente
 
 
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -16,6 +19,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,17 +38,23 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.integrationmvp.component.BottomNavigation
 import com.example.integrationmvp.component.FormComponent
+import com.example.integrationmvp.model.PacienteModel
 import com.example.integrationmvp.ui.theme.Azul1
 import com.example.integrationmvp.ui.theme.Azul4
 import com.example.integrationmvp.ui.theme.Azul5
 import com.example.integrationmvp.viewModel.PacienteViewModel
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
-fun PacienteAtualizar(navController: NavController) {
+fun PacienteAtualizar(navController: NavController,  pacienteId: Long) {
 
-    //val pacienteView =  PacienteViewModel()
-    //val paciente = pacienteView.getPaciente(id)
+    val pacienteView =  PacienteViewModel()
+    val paciente by pacienteView.selectedPaciente.collectAsState()
+
 
     var nome by remember { mutableStateOf("") }
     var cpf by remember { mutableStateOf("") }
@@ -51,6 +62,23 @@ fun PacienteAtualizar(navController: NavController) {
     var genero by remember { mutableStateOf("") }
     var endereco by remember { mutableStateOf("") }
     var contato by remember { mutableStateOf("") }
+
+    pacienteView.getPaciente(pacienteId)
+
+    paciente?.let {
+        nome = it.nomePaciente ?: ""
+        cpf = it.cpf ?: ""
+        dataNascimento = it.dataNascimento?.let { isoDate ->
+            val formatterIso = DateTimeFormatter.ISO_DATE_TIME
+            val dateTime = LocalDateTime.parse(isoDate, formatterIso)
+            val formatterDdMmYyyy = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+            dateTime.format(formatterDdMmYyyy)
+        } ?: ""
+        genero = it.genero ?: ""
+        endereco = it.endereco ?: ""
+        contato = it.contato ?: ""
+    }
+
 
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -172,6 +200,21 @@ fun PacienteAtualizar(navController: NavController) {
                         Button(
                             onClick = {
                                 // Logic to save the patient data
+                                val df = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+                                val longDtNascimento = LocalDate.parse(dataNascimento, df)
+                                val isoDf = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                                val formattedDate = longDtNascimento.format(isoDf)
+
+                                val pacienteNew = PacienteModel(
+                                    pacienteId = pacienteId,
+                                    nomePaciente = nome,
+                                    cpf = cpf,
+                                    dataNascimento = formattedDate,
+                                    genero = genero,
+                                    endereco = endereco,
+                                    contato = contato,
+                                )
+                                pacienteView.updatePaciente(pacienteId, pacienteNew)
                                 keyboardController?.hide() // Hide keyboard
                                 // Navigate back or to another screen
                             },
@@ -201,8 +244,9 @@ fun PacienteAtualizar(navController: NavController) {
     )
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview (showSystemUi = true, showBackground = true)
 fun PacienteAtualizarPreview() {
-    PacienteAtualizar(navController = rememberNavController())
+    PacienteAtualizar(navController = rememberNavController(), pacienteId = 1)
 }

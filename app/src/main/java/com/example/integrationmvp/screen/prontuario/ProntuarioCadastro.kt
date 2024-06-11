@@ -146,8 +146,8 @@ fun ProntuarioCadastro(navController: NavController, prontuarioViewModel: Prontu
 
                         FormComponent(
                             value = historicoPaciente,
-                            placeholder = "Digite o local",
-                            label = "Local",
+                            placeholder = "Digite o histórico",
+                            label = "Histórico Paciente",
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(16.dp),
@@ -161,8 +161,8 @@ fun ProntuarioCadastro(navController: NavController, prontuarioViewModel: Prontu
 
                         FormComponent(
                             value = historicoFamiliar,
-                            placeholder = "Digite o local",
-                            label = "Local",
+                            placeholder = "Digite o histórico",
+                            label = "Histórico Familiar",
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(16.dp),
@@ -176,8 +176,8 @@ fun ProntuarioCadastro(navController: NavController, prontuarioViewModel: Prontu
 
                         FormComponent(
                             value = medicamento,
-                            placeholder = "Digite o local",
-                            label = "Local",
+                            placeholder = "Digite os medicamentos",
+                            label = "Medicamento",
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(16.dp),
@@ -191,8 +191,8 @@ fun ProntuarioCadastro(navController: NavController, prontuarioViewModel: Prontu
 
                         FormComponent(
                             value = triagem,
-                            placeholder = "Digite o local",
-                            label = "Local",
+                            placeholder = "Dados da triagem",
+                            label = "Triagem",
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(16.dp),
@@ -206,8 +206,8 @@ fun ProntuarioCadastro(navController: NavController, prontuarioViewModel: Prontu
 
                         FormComponent(
                             value = exames,
-                            placeholder = "Digite o local",
-                            label = "Local",
+                            placeholder = "Digite o exames",
+                            label = "Exames",
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(16.dp),
@@ -221,7 +221,7 @@ fun ProntuarioCadastro(navController: NavController, prontuarioViewModel: Prontu
 
                         FormComponent(
                             value = dataProntuario,
-                            placeholder = "Digite a data da prontuario",
+                            placeholder = "Digite a data do prontuário",
                             label = "Data",
                             modifier = Modifier
                                 .fillMaxWidth()

@@ -52,12 +52,12 @@ fun PacienteConsulta(navController: NavController, pacienteId: Long) {
                         .padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    Text("Nome: ${paciente?.nomePaciente}", color = Azul5)
+                    /*Text("Nome: ${paciente?.nomePaciente}", color = Azul5)
                     Text("CPF: ${paciente?.cpf}", color = Azul5)
                     Text("Data de Nascimento: ${paciente?.dataNascimento}", color = Azul5)
                     Text("Gênero: ${paciente?.genero}", color = Azul5)
                     Text("Endereço: ${paciente?.endereco}", color = Azul5)
-                    Text("Contato: ${paciente?.contato}", color = Azul5)
+                    Text("Contato: ${paciente?.contato}", color = Azul5)*/
 
                     Button(
                         onClick = { navController.navigate("PacienteIndex") },
