@@ -92,8 +92,8 @@ fun UsuarioIndex(navController: NavController) {
                             usuario = usuario,
                             onEditClick = { navController.navigate("usuarioatualizar/${usuario.usuarioId}") },
                             onDeleteClick = { navController.navigate("usuarioexcluir/${usuario.usuarioId}") },
-                            onDetailClick = { navController.navigate("usuarioconsulta/${usuario.usuarioId}") }
-                        )
+
+                            )
                     }
                 } else {
                     Text(
@@ -122,8 +122,8 @@ fun UsuarioCard(
     usuario: UsuarioModel,
     onEditClick: () -> Unit,
     onDeleteClick: () -> Unit,
-    onDetailClick: () -> Unit
-) {
+
+    ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -144,26 +144,23 @@ fun UsuarioCard(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Button(onClick = onDetailClick,
-                    colors = ButtonDefaults.buttonColors(
-                        Azul4,
-                        contentColor = Azul1
-                    )) {
-                    Text(text = "Consultar")
 
-                }
-                Button(onClick = onEditClick,
+                Button(
+                    onClick = onEditClick,
                     colors = ButtonDefaults.buttonColors(
                         Azul4,
                         contentColor = Azul1
-                    )) {
+                    )
+                ) {
                     Text(text = "Atualizar")
                 }
-                Button(onClick = onDeleteClick,
+                Button(
+                    onClick = onDeleteClick,
                     colors = ButtonDefaults.buttonColors(
                         Azul4,
                         contentColor = Azul1
-                    )) {
+                    )
+                ) {
                     Text(text = "Excluir")
 
                 }

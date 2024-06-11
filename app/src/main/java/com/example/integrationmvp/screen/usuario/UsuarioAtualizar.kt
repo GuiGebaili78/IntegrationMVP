@@ -1,5 +1,7 @@
 package com.example.integrationmvp.screen.usuario
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -15,6 +17,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,21 +35,35 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.integrationmvp.component.BottomNavigation
 import com.example.integrationmvp.component.FormComponent
+import com.example.integrationmvp.model.PacienteModel
+import com.example.integrationmvp.model.UsuarioModel
 import com.example.integrationmvp.ui.theme.Azul1
 import com.example.integrationmvp.ui.theme.Azul4
 import com.example.integrationmvp.ui.theme.Azul5
 import com.example.integrationmvp.viewModel.UsuarioViewModel
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
-fun UsuarioAtualizar(navController: NavController) {
+fun UsuarioAtualizar(navController: NavController, usuarioId: Long) {
 
-    //val usuarioView =  UsuarioViewModel()
-    //val usuario = usuarioView.getUsuario(id)
+    val usuarioView =  UsuarioViewModel()
+    val paciente by usuarioView.selectedUsuario.collectAsState()
 
     var nome by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var senha by remember { mutableStateOf("") }
+
+    usuarioView.getUsuario(usuarioId)
+
+    paciente?.let {
+        nome = it.nomeUsuario ?: ""
+        email = it.emailUsuario ?: ""
+        senha = it.senhaUsuario ?: ""
+    }
 
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -124,16 +141,22 @@ fun UsuarioAtualizar(navController: NavController) {
 
                         Button(
                             onClick = {
-                                // Logic to save the patient data
-                                keyboardController?.hide() // Hide keyboard
-                                // Navigate back or to another screen
+
+                                val usuarioNew = UsuarioModel(
+                                    usuarioId = usuarioId,
+                                    nomeUsuario = nome,
+                                    emailUsuario = email,
+                                    senhaUsuario = senha,
+                                )
+                                usuarioView.updateUsuario(usuarioId, usuarioNew)
+                                keyboardController?.hide()
                             },
                             modifier = Modifier
                                 .align(Alignment.CenterHorizontally)
                                 .padding(vertical = 16.dp),
-                            colors = ButtonDefaults.buttonColors( // Set button colors
-                                containerColor = Azul4, // New name for background color
-                                contentColor = Color.White // Cor do Texto do Botão
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Azul4,
+                                contentColor = Color.White
                             )
 
 
@@ -157,5 +180,5 @@ fun UsuarioAtualizar(navController: NavController) {
 @Composable
 @Preview (showSystemUi = true, showBackground = true)
 fun UsuarioAtualizarPreview() {
-    UsuarioAtualizar(navController = rememberNavController())
+    UsuarioAtualizar(navController = rememberNavController(), usuarioId = 1)
 }

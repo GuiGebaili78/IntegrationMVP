@@ -243,8 +243,8 @@ fun ProntuarioCadastro(navController: NavController, prontuarioViewModel: Prontu
                                 val formattedDate = longDtNascimento.format(isoDf)
 
                                 val prontuario = ProntuarioModel(
-                                    pacienteId = pacienteId.toLong(),
-                                    medicoId = medicoId.toLong(),
+                                    pacienteId = pacienteId,
+                                    medicoId = medicoId,
                                     historicoPaciente = historicoPaciente,
                                     historicoFamiliar = historicoFamiliar,
                                     medicamento = medicamento,
@@ -261,7 +261,7 @@ fun ProntuarioCadastro(navController: NavController, prontuarioViewModel: Prontu
                             },
                             modifier = Modifier
                                 .align(Alignment.CenterHorizontally)
-                                .padding(vertical = 16.dp),
+                                .padding(vertical = 2.dp),
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Azul4,
                                 contentColor = Color.White

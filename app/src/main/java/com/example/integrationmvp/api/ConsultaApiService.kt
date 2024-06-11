@@ -1,6 +1,7 @@
 package com.example.integrationmvp.api
 
 import com.example.integrationmvp.model.ConsultaModel
+import com.example.integrationmvp.model.PacienteModel
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
@@ -18,14 +19,19 @@ interface ConsultaApiService {
     @PUT("api/Consulta/{id}")
     suspend fun updateConsulta(@Path("id") id: Long, @Body consulta: ConsultaModel): ConsultaModel
 
+    @Headers("Content-Type: application/json")
+    @GET("api/Consulta/{id}")
+    suspend fun getConsulta(@Path("id") id: Long): ConsultaModel
+    
     @DELETE("api/Consulta/{id}")
     suspend fun deleteConsulta(@Path("id") id: Long)
+
 }
 
 object ConsultaApiClient {
     private val retrofit: Retrofit by lazy {
         Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:5041/") // Substitua pela URL da sua API
+            .baseUrl("http://10.0.2.2:5041/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

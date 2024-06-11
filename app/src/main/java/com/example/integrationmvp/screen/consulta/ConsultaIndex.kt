@@ -30,7 +30,6 @@ import com.example.integrationmvp.model.ConsultaModel
 import com.example.integrationmvp.ui.theme.Azul1
 import com.example.integrationmvp.ui.theme.Azul4
 import com.example.integrationmvp.viewModel.ConsultaViewModel
-import com.example.integrationmvp.viewModel.PacienteViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,7 +37,7 @@ fun ConsultaIndex(navController: NavController) {
     val consultaView = remember { ConsultaViewModel() }
     val consultas by consultaView.consultas.collectAsState()
 
-    // Use LaunchedEffect to fetch consultas only once
+
     LaunchedEffect(Unit) {
         consultaView.fetchConsultas()
     }
@@ -90,7 +89,7 @@ fun ConsultaIndex(navController: NavController) {
                             consulta = consulta,
                             onEditClick = { navController.navigate("consultaatualizar/${consulta.consultaId}") },
                             onDeleteClick = { navController.navigate("consultaexcluir/${consulta.consultaId}") },
-                            onDetailClick = { navController.navigate("consultaconsulta/${consulta.consultaId}") }
+
                         )
                     }
                 } else {
@@ -119,7 +118,7 @@ fun ConsultaCard(
     consulta: ConsultaModel,
     onEditClick: () -> Unit,
     onDeleteClick: () -> Unit,
-    onDetailClick: () -> Unit
+
 ) {
     Card(
         modifier = Modifier
@@ -143,13 +142,7 @@ fun ConsultaCard(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Button(onClick = onDetailClick,
-                    colors = ButtonDefaults.buttonColors(
-                        Azul4,
-                        contentColor = Azul1
-                    )) {
-                    Text(text = "Consultar")
-                }
+
                 Button(onClick = onEditClick,
                     colors = ButtonDefaults.buttonColors(
                         Azul4,

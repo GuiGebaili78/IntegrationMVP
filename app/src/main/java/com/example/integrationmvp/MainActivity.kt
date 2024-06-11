@@ -18,21 +18,20 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.integrationmvp.screen.medico.MedicoAtualizar
 import com.example.integrationmvp.screen.medico.MedicoCadastro
-import com.example.integrationmvp.screen.medico.MedicoConsulta
 import com.example.integrationmvp.screen.medico.MedicoIndex
 import com.example.integrationmvp.screen.paciente.PacienteAtualizar
 import com.example.integrationmvp.screen.paciente.PacienteCadastro
-import com.example.integrationmvp.screen.paciente.PacienteConsulta
 import com.example.integrationmvp.screen.paciente.PacienteIndex
 import com.example.integrationmvp.screen.BemVindo
 import com.example.integrationmvp.screen.Menu
+import com.example.integrationmvp.screen.consulta.ConsultaAtualizar
 import com.example.integrationmvp.screen.consulta.ConsultaCadastro
 import com.example.integrationmvp.screen.consulta.ConsultaIndex
+import com.example.integrationmvp.screen.prontuario.ProntuarioAtualizar
 import com.example.integrationmvp.screen.prontuario.ProntuarioCadastro
 import com.example.integrationmvp.screen.prontuario.ProntuarioIndex
 import com.example.integrationmvp.screen.usuario.UsuarioAtualizar
 import com.example.integrationmvp.screen.usuario.UsuarioCadastro
-import com.example.integrationmvp.screen.usuario.UsuarioConsulta
 import com.example.integrationmvp.screen.usuario.UsuarioIndex
 import com.example.integrationmvp.ui.theme.IntegrationMVPTheme
 
@@ -64,14 +63,6 @@ class MainActivity : ComponentActivity() {
                         composable(route = "pacientecadastro") {
                             PacienteCadastro(navController = navController)
                         }
-                        composable(route = "pacienteconsulta/{pacienteId}", arguments = listOf(
-                            navArgument("pacienteId") { type = NavType.LongType })) {
-                                backStackEntry ->
-                            PacienteConsulta(
-                                navController = navController,
-                                pacienteId = backStackEntry.arguments?.getLong("pacienteId") ?: -1L
-                            )
-                        }
                         composable(route = "pacienteatualizar/{pacienteId}", arguments = listOf(
                             navArgument("pacienteId") { type = NavType.LongType })) {
                                 backStackEntry ->
@@ -92,11 +83,13 @@ class MainActivity : ComponentActivity() {
                         composable(route = "medicocadastro") {
                             MedicoCadastro(navController = navController)
                         }
-                        composable(route = "medicoconsulta") {
-                            MedicoConsulta(navController = navController)
-                        }
-                        composable(route = "medicoatualizar") {
-                            MedicoAtualizar(navController = navController)
+                        composable(route = "medicoatualizar/{medicoId}", arguments = listOf(
+                            navArgument("medicoId") { type = NavType.LongType })) {
+                                backStackEntry ->
+                            MedicoAtualizar(
+                                navController = navController,
+                                medicoId = backStackEntry.arguments?.getLong("medicoId") ?: -1L
+                            )
                         }
 
 
@@ -109,11 +102,13 @@ class MainActivity : ComponentActivity() {
                         composable(route = "consultacadastro") {
                             ConsultaCadastro(navController = navController)
                         }
-                        composable(route = "consultaconsulta") {
-                            //ConsultaConsulta(navController = navController)
-                        }
-                        composable(route = "consultaatualizar") {
-                            //ConsultaAtualizar(navController = navController)
+                        composable(route = "consultaatualizar/{consultaId}", arguments = listOf(
+                            navArgument("consultaId") { type = NavType.LongType })) {
+                                backStackEntry ->
+                            ConsultaAtualizar(
+                                navController = navController,
+                                consultaId = backStackEntry.arguments?.getLong("consultaId") ?: -1L
+                            )
                         }
 
 
@@ -127,12 +122,13 @@ class MainActivity : ComponentActivity() {
                         composable(route = "usuariocadastro") {
                             UsuarioCadastro(navController = navController)
                         }
-                        composable(route = "usuarioconsulta") {
-                            UsuarioConsulta(navController = navController)
-                        }
-
-                        composable(route = "usuarioatualizar") {
-                            UsuarioAtualizar(navController = navController)
+                        composable(route = "usuarioatualizar/{usuarioId}", arguments = listOf(
+                            navArgument("usuarioId") { type = NavType.LongType })) {
+                                backStackEntry ->
+                            UsuarioAtualizar(
+                                navController = navController,
+                                usuarioId = backStackEntry.arguments?.getLong("usuarioId") ?: -1L
+                            )
                         }
 
 
@@ -145,14 +141,15 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(route = "prontuariocadastro") {
                             ProntuarioCadastro(navController = navController)
-                        }/*
-                        composable(route = "prontuarioconsulta") {
-                            ProntuarioConsulta(navController = navController)
                         }
-
-                        composable(route = "prontuarioatualizar") {
-                            ProntuarioAtualizar(navController = navController)
-                        }*/
+                        composable(route = "prontuarioatualizar/{prontuarioId}", arguments = listOf(
+                            navArgument("prontuarioId") { type = NavType.LongType })) {
+                                backStackEntry ->
+                            ProntuarioAtualizar(
+                                navController = navController,
+                                prontuarioId = backStackEntry.arguments?.getLong("prontuarioId") ?: -1L
+                            )
+                        }
 
 
 

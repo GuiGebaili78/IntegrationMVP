@@ -92,7 +92,7 @@ fun MedicoIndex(navController: NavController) {
                             medico = medico,
                             onEditClick = { navController.navigate("medicoatualizar/${medico.medicoId}") },
                             onDeleteClick = { navController.navigate("medicoexcluir/${medico.medicoId}") },
-                            onDetailClick = { navController.navigate("medicoconsulta/${medico.medicoId}") }
+
                         )
                     }
                 } else {
@@ -122,7 +122,7 @@ fun MedicoCard(
     medico: MedicoModel,
     onEditClick: () -> Unit,
     onDeleteClick: () -> Unit,
-    onDetailClick: () -> Unit
+
 ) {
     Card(
         modifier = Modifier
@@ -145,14 +145,7 @@ fun MedicoCard(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Button(onClick = onDetailClick,
-                    colors = ButtonDefaults.buttonColors(
-                        Azul4,
-                        contentColor = Azul1
-                    )) {
-                    Text(text = "Consultar")
 
-                }
                 Button(onClick = onEditClick,
                     colors = ButtonDefaults.buttonColors(
                         Azul4,

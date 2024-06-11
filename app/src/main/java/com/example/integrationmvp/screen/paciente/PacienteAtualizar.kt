@@ -50,9 +50,9 @@ import java.time.format.DateTimeFormatter
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
-fun PacienteAtualizar(navController: NavController,  pacienteId: Long) {
+fun PacienteAtualizar(navController: NavController, pacienteId: Long) {
 
-    val pacienteView =  PacienteViewModel()
+    val pacienteView = PacienteViewModel()
     val paciente by pacienteView.selectedPaciente.collectAsState()
 
 
@@ -97,10 +97,10 @@ fun PacienteAtualizar(navController: NavController,  pacienteId: Long) {
             Surface(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(contentPadding), // Use contentPadding to ensure content is not obscured by app bars
-                color = Azul1 // Cor de fundo do Surface
+                    .padding(contentPadding),
+                color = Azul1
             ) {
-                Box (
+                Box(
                     modifier = Modifier.fillMaxSize()
                 ) {
                     Column(
@@ -108,7 +108,7 @@ fun PacienteAtualizar(navController: NavController,  pacienteId: Long) {
                             .fillMaxSize()
                             .verticalScroll(rememberScrollState())
                             .padding(2.dp)
-                            .padding(vertical = 4.dp) // Adicionando espaçamento vertical menor
+                            .padding(vertical = 4.dp)
                     ) {
                         FormComponent(
                             value = nome,
@@ -133,7 +133,7 @@ fun PacienteAtualizar(navController: NavController,  pacienteId: Long) {
                                 .padding(16.dp),
                             keyboardType = KeyboardType.Number,
                             atualizarValor = { novoValor ->
-                                nome = novoValor
+                                cpf = novoValor
                             }
                         )
                         Spacer(modifier = Modifier.height(2.dp))
@@ -194,9 +194,6 @@ fun PacienteAtualizar(navController: NavController,  pacienteId: Long) {
                         )
                         Spacer(modifier = Modifier.height(2.dp))
 
-
-                        // Repeat TextField for other fields (cpf, dataNascimento, genero, endereco, contato, email)
-
                         Button(
                             onClick = {
                                 // Logic to save the patient data
@@ -215,12 +212,11 @@ fun PacienteAtualizar(navController: NavController,  pacienteId: Long) {
                                     contato = contato,
                                 )
                                 pacienteView.updatePaciente(pacienteId, pacienteNew)
-                                keyboardController?.hide() // Hide keyboard
-                                // Navigate back or to another screen
+                                keyboardController?.hide()
                             },
                             modifier = Modifier
                                 .align(Alignment.CenterHorizontally)
-                                .padding(vertical = 16.dp),
+                                .padding(vertical = 2.dp),
                             colors = ButtonDefaults.buttonColors( // Set button colors
                                 containerColor = Azul4, // New name for background color
                                 contentColor = Color.White // Cor do Texto do Botão
@@ -246,7 +242,7 @@ fun PacienteAtualizar(navController: NavController,  pacienteId: Long) {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-@Preview (showSystemUi = true, showBackground = true)
+@Preview(showSystemUi = true, showBackground = true)
 fun PacienteAtualizarPreview() {
     PacienteAtualizar(navController = rememberNavController(), pacienteId = 1)
 }

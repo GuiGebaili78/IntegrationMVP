@@ -19,6 +19,10 @@ interface MedicoApiService {
     @PUT("api/Medico/{id}")
     suspend fun updateMedico(@Path("id") id: Long, @Body paciente: MedicoModel): MedicoModel
 
+    @Headers("Content-Type: application/json")
+    @GET("api/Medico/{id}")
+    suspend fun getMedico(@Path("id") id: Long): MedicoModel
+
     @DELETE("api/Medico/{id}")
     suspend fun deleteMedico(@Path("id") id: Long)
 }

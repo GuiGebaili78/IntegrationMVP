@@ -1,6 +1,8 @@
 package com.example.integrationmvp.screen.medico
 
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -16,6 +18,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,21 +36,33 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.integrationmvp.component.BottomNavigation
 import com.example.integrationmvp.component.FormComponent
+import com.example.integrationmvp.model.MedicoModel
 import com.example.integrationmvp.ui.theme.Azul1
 import com.example.integrationmvp.ui.theme.Azul4
 import com.example.integrationmvp.ui.theme.Azul5
+import com.example.integrationmvp.viewModel.MedicoViewModel
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
-fun MedicoAtualizar(navController: NavController) {
+fun MedicoAtualizar(navController: NavController, medicoId: Long) {
 
-    //val medicoView =  MedicoViewModel()
-    //val medico = medicoView.getMedico(id)
+    val medicoView = MedicoViewModel()
+    val medico by medicoView.selectedMedico.collectAsState()
 
     var nome by remember { mutableStateOf("") }
     var crm by remember { mutableStateOf("") }
     var especialidade by remember { mutableStateOf("") }
     var contato by remember { mutableStateOf("") }
+
+    medicoView.getMedico(medicoId)
+
+    medico?.let {
+        nome = it.nomeMedico ?: ""
+        crm = it.crm ?: ""
+        especialidade = it.especialidade ?: ""
+        contato = it.contato ?: ""
+    }
 
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -69,7 +84,7 @@ fun MedicoAtualizar(navController: NavController) {
                     .padding(contentPadding),
                 color = Azul1
             ) {
-                Box (
+                Box(
                     modifier = Modifier.fillMaxSize()
                 ) {
                     Column(
@@ -139,8 +154,15 @@ fun MedicoAtualizar(navController: NavController) {
 
                         Button(
                             onClick = {
+                                val medicoNew = MedicoModel(
+                                    medicoId = medicoId,
+                                    nomeMedico = nome,
+                                    crm = crm,
+                                    especialidade = especialidade,
+                                    contato = contato,
+                                )
+                                medicoView.updateMedico(medicoId, medicoNew)
                                 keyboardController?.hide()
-
                             },
                             modifier = Modifier
                                 .align(Alignment.CenterHorizontally)
@@ -169,7 +191,7 @@ fun MedicoAtualizar(navController: NavController) {
 }
 
 @Composable
-@Preview (showSystemUi = true, showBackground = true)
+@Preview(showSystemUi = true, showBackground = true)
 fun MedicoAtualizarPreview() {
-    MedicoAtualizar(navController = rememberNavController())
+    MedicoAtualizar(navController = rememberNavController(), medicoId = 1)
 }

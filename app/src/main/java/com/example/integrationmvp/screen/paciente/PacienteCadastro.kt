@@ -59,7 +59,6 @@ fun PacienteCadastro(navController: NavController) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
 
-
     Scaffold(
         topBar = {
             TopAppBar(
@@ -75,8 +74,8 @@ fun PacienteCadastro(navController: NavController) {
             Surface(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(contentPadding), // Use contentPadding to ensure content is not obscured by app bars
-                color = Azul1 // Cor de fundo do Surface
+                    .padding(contentPadding),
+                color = Azul1
             ) {
                 Box (
                     modifier = Modifier.fillMaxSize()
@@ -86,7 +85,7 @@ fun PacienteCadastro(navController: NavController) {
                             .fillMaxSize()
                             .verticalScroll(rememberScrollState())
                             .padding(2.dp)
-                            .padding(vertical = 4.dp) // Adicionando espaçamento vertical menor
+                            .padding(vertical = 4.dp)
                     ) {
                         FormComponent(
                             value = nome,

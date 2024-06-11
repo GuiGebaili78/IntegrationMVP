@@ -1,5 +1,6 @@
 package com.example.integrationmvp.api
 
+import com.example.integrationmvp.model.ConsultaModel
 import com.example.integrationmvp.model.ProntuarioModel
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -17,6 +18,10 @@ interface ProntuarioApiService {
     @Headers("Content-Type: application/json")
     @PUT("api/Prontuario/{id}")
     suspend fun updateProntuario(@Path("id") id: Long, @Body prontuario: ProntuarioModel): ProntuarioModel
+
+    @Headers("Content-Type: application/json")
+    @GET("api/Prontuario/{id}")
+    suspend fun getProntuario(@Path("id") id: Long): ProntuarioModel
 
     @DELETE("api/Prontuario/{id}")
     suspend fun deleteProntuario(@Path("id") id: Long)

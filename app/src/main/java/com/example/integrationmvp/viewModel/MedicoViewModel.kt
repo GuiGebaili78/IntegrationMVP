@@ -4,7 +4,9 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.integrationmvp.api.MedicoApiClient
+import com.example.integrationmvp.api.PacienteApiClient
 import com.example.integrationmvp.model.MedicoModel
+import com.example.integrationmvp.model.PacienteModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,6 +15,9 @@ import kotlinx.coroutines.CompletableDeferred
 class MedicoViewModel : ViewModel() {
     private val _medicos = MutableStateFlow<List<MedicoModel>>(emptyList())
     val medicos: StateFlow<List<MedicoModel>> get() = _medicos
+
+    private val _selectedMedico = MutableStateFlow<MedicoModel?>(null)
+    val selectedMedico: StateFlow<MedicoModel?> get() = _selectedMedico
 
     private var isFetching = false
 
@@ -52,8 +57,19 @@ class MedicoViewModel : ViewModel() {
         }
     }
 
-    fun getMedico(id: Long): MedicoModel? {
-        return _medicos.value.find { it.medicoId == id }
+    fun getMedico(id: Long) {
+        viewModelScope.launch {
+            try {
+                val medico = MedicoApiClient.apiService.getMedico(id)
+                _selectedMedico.value = medico
+            } catch (e: HttpException) {
+                val responseBody = e.response()?.errorBody()?.string()
+                Log.d("MedicoAPI", "Erro HTTP: ${e.code()} ${e.message()}")
+                Log.d("MedicoAPI", "Resposta de erro: $responseBody")
+            } catch (e: Exception) {
+                Log.d("MedicoAPI", "Erro geral: ${e.toString()}")
+            }
+        }
     }
 
     fun getMedicos(): List<MedicoModel> {

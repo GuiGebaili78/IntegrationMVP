@@ -38,6 +38,7 @@ fun ConsultaCadastro(navController: NavController, consultaViewModel: ConsultaVi
     var pacienteId by remember { mutableStateOf("") }
     var medicoId by remember { mutableStateOf("") }
     var dataConsulta by remember { mutableStateOf("01/01/2023") }
+    var horaConsulta by remember { mutableStateOf("10:30") }
     var localConsulta by remember { mutableStateOf("Hospital Morumbi") }
     var mensagem by remember { mutableStateOf("Observações") }
 
@@ -157,6 +158,21 @@ fun ConsultaCadastro(navController: NavController, consultaViewModel: ConsultaVi
                         Spacer(modifier = Modifier.height(2.dp))
 
                         FormComponent(
+                            value = horaConsulta,
+                            placeholder = "Digite a hora da consulta",
+                            label = "horário",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            keyboardType = KeyboardType.Number,
+                            atualizarValor = { novoValor ->
+                                horaConsulta = novoValor
+                            }
+                        )
+
+                        Spacer(modifier = Modifier.height(2.dp))
+
+                        FormComponent(
                             value = localConsulta,
                             placeholder = "Digite o local",
                             label = "Local",
@@ -194,9 +210,10 @@ fun ConsultaCadastro(navController: NavController, consultaViewModel: ConsultaVi
                                 val formattedDate = longDtNascimento.format(isoDf)
 
                                 val consulta = ConsultaModel(
-                                    pacienteId = pacienteId.toLong(),
-                                    medicoId = medicoId.toLong(),
+                                    pacienteId = pacienteId,
+                                    medicoId = medicoId,
                                     dataConsulta = formattedDate,
+                                    horaConsulta = horaConsulta,
                                     localConsulta = localConsulta,
                                     mensagem = mensagem,
 

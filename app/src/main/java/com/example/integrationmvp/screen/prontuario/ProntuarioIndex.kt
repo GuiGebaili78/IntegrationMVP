@@ -38,7 +38,7 @@ fun ProntuarioIndex(navController: NavController) {
     val prontuarioView = remember { ProntuarioViewModel() }
     val prontuarios by prontuarioView.prontuarios.collectAsState()
 
-    // Use LaunchedEffect to fetch prontuarios only once
+
     LaunchedEffect(Unit) {
         prontuarioView.fetchProntuarios()
     }
@@ -90,7 +90,7 @@ fun ProntuarioIndex(navController: NavController) {
                             prontuario = prontuario,
                             onEditClick = { navController.navigate("prontuarioatualizar/${prontuario.prontuarioId}") },
                             onDeleteClick = { navController.navigate("prontuarioexcluir/${prontuario.prontuarioId}") },
-                            onDetailClick = { navController.navigate("prontuarioprontuario/${prontuario.prontuarioId}") }
+
                         )
                     }
                 } else {
@@ -119,7 +119,7 @@ fun ProntuarioCard(
     prontuario: ProntuarioModel,
     onEditClick: () -> Unit,
     onDeleteClick: () -> Unit,
-    onDetailClick: () -> Unit
+
 ) {
     Card(
         modifier = Modifier
@@ -145,13 +145,7 @@ fun ProntuarioCard(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Button(onClick = onDetailClick,
-                    colors = ButtonDefaults.buttonColors(
-                        Azul4,
-                        contentColor = Azul1
-                    )) {
-                    Text(text = "Prontuarior")
-                }
+
                 Button(onClick = onEditClick,
                     colors = ButtonDefaults.buttonColors(
                         Azul4,

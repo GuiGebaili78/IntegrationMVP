@@ -92,7 +92,7 @@ fun PacienteIndex(navController: NavController) {
                             paciente = paciente,
                             onEditClick = { navController.navigate("pacienteatualizar/${paciente.pacienteId}") },
                             onDeleteClick = { navController.navigate("pacienteexcluir/${paciente.pacienteId}") },
-                            onDetailClick = { navController.navigate("pacienteconsulta/${paciente.pacienteId}") }
+
                         )
                     }
                 } else {
@@ -122,7 +122,7 @@ fun PacienteCard(
     paciente: PacienteModel,
     onEditClick: () -> Unit,
     onDeleteClick: () -> Unit,
-    onDetailClick: () -> Unit
+
 ) {
     Card(
         modifier = Modifier
@@ -147,14 +147,7 @@ fun PacienteCard(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Button(onClick = onDetailClick,
-                    colors = ButtonDefaults.buttonColors(
-                        Azul4,
-                        contentColor = Azul1
-                    )) {
-                    Text(text = "Consultar")
 
-                }
                 Button(onClick = onEditClick,
                     colors = ButtonDefaults.buttonColors(
                         Azul4,

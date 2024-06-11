@@ -1,5 +1,6 @@
 package com.example.integrationmvp.api
 
+import com.example.integrationmvp.model.PacienteModel
 import com.example.integrationmvp.model.UsuarioModel
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -17,6 +18,11 @@ interface UsuarioApiService {
     @Headers("Content-Type: application/json")
     @PUT("api/Usuario/{id}")
     suspend fun updateUsuario(@Path("id") id: Long, @Body usuario: UsuarioModel): UsuarioModel
+
+    @Headers("Content-Type: application/json")
+    @GET("api/Usuario/{id}")
+    suspend fun getUsuario(@Path("id") id: Long): UsuarioModel
+
 
     @DELETE("api/Usuario/{id}")
     suspend fun deleteUsuario(@Path("id") id: Long)

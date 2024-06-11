@@ -5,8 +5,8 @@ import androidx.annotation.RequiresApi
 
 data class ConsultaModel @RequiresApi(Build.VERSION_CODES.O) constructor(
     val consultaId: Long = 0,
-    val pacienteId: Long = 0,
-    val medicoId: Long = 0,
+    val pacienteId: String? = null,
+    val medicoId: String? = null,
     val dataConsulta: String? = null,
     val horaConsulta: String? = null,
     val localConsulta: String? = null,

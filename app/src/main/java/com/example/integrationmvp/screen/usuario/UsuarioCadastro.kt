@@ -53,6 +53,7 @@ fun UsuarioCadastro(navController: NavController) {
 
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -68,8 +69,8 @@ fun UsuarioCadastro(navController: NavController) {
             Surface(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(contentPadding), // Use contentPadding to ensure content is not obscured by app bars
-                color = Azul1 // Cor de fundo do Surface
+                    .padding(contentPadding),
+                color = Azul1
             ) {
                 Box (
                     modifier = Modifier.fillMaxSize()
@@ -79,7 +80,7 @@ fun UsuarioCadastro(navController: NavController) {
                             .fillMaxSize()
                             .verticalScroll(rememberScrollState())
                             .padding(2.dp)
-                            .padding(vertical = 4.dp) // Adicionando espaçamento vertical menor
+                            .padding(vertical = 4.dp)
                     ) {
                         FormComponent(
                             value = nome,
@@ -122,9 +123,6 @@ fun UsuarioCadastro(navController: NavController) {
                             }
                         )
                         Spacer(modifier = Modifier.height(2.dp))
-
-
-                        // Repeat TextField for other fields (cpf, dataNascimento, genero, endereco, contato, email)
 
                         Button(
                             onClick = {                                
